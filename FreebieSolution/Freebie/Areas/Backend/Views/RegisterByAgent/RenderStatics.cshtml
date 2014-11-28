@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "RenderResultStatics";
+    ViewBag.PageName = "ลงทะเบียนสมาชิก";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+}
+<div>
+   
+     @Html.Partial("RegisterStep") 
+
+      <div class="tab-content" id="register-tab-content" style="padding:0 0 20px 20px;">
+            <div class="title-accInfo">
+	            <span>ผลการดำเนินการ</span>
+            </div>
+            <br />
+            <div>
+                @if (ViewBag.Type != 3)
+                {
+                    <p>
+                        หมายเลขนี้ไม่สามารถใช้ลงทะเบียนใหม่ได้ กรุณาติดต่อ Call Center
+                    </p>
+                }
+                else
+                { 
+                    <p>
+                        ขณะนี้เป็นช่วงเวลาปิดระบบการสมัครสมาชิก กรุณาเข้ามาลงทะเบียนใหม่อีกครั้ง
+                    </p>
+                }
+                <div style="text-align:center;margin-top:40px;">
+                    <a href="@ViewBag.Path" class="btn btn-primary btn-blue">ย้อนกลับ</a>
+                </div>
+            </div>
+     </div>
+</div>

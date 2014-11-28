@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Freebie.Models.Quota>
+@{
+    ViewBag.Title = "BaseQuota";
+    ViewBag.PageName = "ตั้งค่าโควต้าการโทร";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    bool has_permission = role_cd.Equals("AM");  
+}
+
+<div class="backend-table-title">
+	<span>รายการโควต้าการโทร</span>     
+     @if (has_permission)
+     { 
+         @Html.ActionLink("แก้ไข", "UpdateBaseQuota", "AdminConfig", null, new { style = "float:right;" })    
+     } 
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <table class="border-table" style="width:500px;text-align:center;">
+        <thead>
+                <tr style="background:#00EEDD;">
+                    <th style="width:80px;">ลำดับที่</th>
+                    <th style="width:150px;">ชื่อโควต้า</th>
+                    <th style="width:100px;">ความถี่ต่อวัน</th>
+                    <th style="width:170px;">ระยะเวลาต่อครั้ง (นาที)</th>
+                </tr>
+        </thead>
+        @{var count = 1;}
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td style="text-align:left;">
+                        @if (@count == 1)
+                        { @Html.Raw("Low Quota")}
+                        else
+                        {
+                            if (@count == 2)
+                            { 
+                                @Html.Raw("Medium Quota")
+                            }
+                            else
+                            {
+                                if (@count == 3)
+                                { @Html.Raw("High Quota") }
+                            }
+                        }
+                    </td>
+                    <td>@item.Quota_Freq_Val</td>
+                    <td>@item.Quota_Dur_Val</td>
+                </tr>
+                        count++;
+            }
+        </tbody>
+    </table>
+</div>
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

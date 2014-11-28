@@ -1,0 +1,85 @@
+﻿@using Freebie.Libs;
+@using Freebie.Models;
+
+@model IEnumerable<Freebie.Models.User>
+@{
+    ViewBag.Title = "StaffAcct";
+    ViewBag.PageName = "จัดการบัญชีพนักงาน";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    bool has_permission = Permission.has_permission(Permission.staff_acct_page_id);
+
+    System.Collections.Hashtable dept_names = new System.Collections.Hashtable();
+    var db = new EchoContext();
+
+    List<Freebie.Models.Dept> dept_arrs = db.Depts.ToList();
+
+    foreach (var d in dept_arrs)
+    {
+        dept_names[d.Dept_Cd] = d.Dept_Name_En;
+    }
+    
+}
+@using PagedList.Mvc; 
+@using PagedList;
+<link href="@Url.Content("~/Content/PagedList.css")" rel="stylesheet" type="text/css" />
+
+<div class="backend-table-title">
+	<span>รายชื่อพนักงานในสังกัด</span>
+     @if (role_cd.Equals("AM"))
+     {
+        @Html.ActionLink("ย้อนกลับ", "SupervisorAcct", "User", null, new { style = "float:right;margin-left:20px;" })
+     }
+     @if (has_permission)
+     {
+        @Html.ActionLink("สร้างใหม่", "CreateStaffAcct", "User", null, new { style = "float:right;" })
+     }
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <table class="border-table" style="width:800px;text-align:center;">
+        <thead>
+                <tr style="background:#00EEDD;">
+                    <th style="width:70px;">ลำดับที่</th>
+                    <th style="width:100px;">รหัสพนักงาน</th>
+                    <th style="width:200px;">ชื่อพนักงาน</th>
+                    <th style="width:200px;">สังกัด</th>
+                    <th style="width:50px;">กลุ่มที่</th>
+                    <th style="width:80px;">สถานะ</th>
+                    <th style="width:100px;">&nbsp;</th>
+                </tr>
+        </thead>
+        @{var count = 1;}
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(count + ViewBag.pageSize * (ViewBag.pageNumber - 1))</td>
+                    <td>@item.User_No</td>
+                    <td>@item.First_Name @item.Last_Name</td>
+                    <td>@dept_names[@item.Dept_Cd]</td>
+                    <td>@item.Group_Id</td>
+                    <td>@item.Status()</td>
+                    <td>
+                         @if (has_permission)
+                         {
+                            @Html.ActionLink("รายละเอียด", "ViewStaffAcct", "User", new { user_id = item.User_Id },
+                                             null) 
+                            @Html.Raw(" ")
+                            @Html.ActionLink("ลบ", "RemoveStaff", "User", new { user_id = item.User_Id },
+                                             new { onclick = "return confirm('ยืนยันการลบข้อมูลบัญชีพนักงาน');" })
+                         }
+                    </td>
+                </tr>
+                         count++;
+            }
+        </tbody>
+    </table>
+    @Html.PagedListPager((IPagedList)ViewBag.PageStaffs, page => Url.Action("StaffAcct", new { page }))
+</div>
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

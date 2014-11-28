@@ -1,0 +1,86 @@
+﻿@using Freebie.Libs;
+
+@model Freebie.Models.User
+@{
+    ViewBag.Title = "ViewStaffAcct";
+    ViewBag.PageName = "จัดการบัญชีพนักงาน";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    bool has_permission = Permission.has_permission(Permission.staff_acct_page_id);
+}
+<div class="backend-table-title">
+	<span>ข้อมูลบัญชีพนักงาน</span>   
+    @Html.ActionLink("ย้อนกลับ", "StaffAcct", "User", null, new { style = "float:right;margin-left:20px;" })
+    @if (has_permission)
+    {
+        @Html.ActionLink("แก้ไข", "UpdateStaffAcct", "User", new { user_id = Model.User_Id }, new { style = "float:right;" })
+    }
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+     @using (Html.BeginForm("CreateStaffAcct", "User", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-horizontal", style = "width:100%;" }))
+     {
+         <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;">
+			    ชื่อผู้ใช้:
+		    </label>
+		    <div class="controls">
+			    @Model.User_No      
+		    </div>         
+	     </div>
+         <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;">
+			    รหัสผ่าน:
+		    </label>
+		    <div class="controls">
+			    ******     
+		    </div>         
+	    </div>
+         <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;">
+			    ชื่อ:
+		    </label>
+		    <div class="controls">
+			    @Model.First_Name    
+		    </div>         
+	    </div>
+         <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;">
+			    นามสกุล:
+		    </label>
+		    <div class="controls">
+			    @Model.Last_Name
+		    </div>         
+	    </div>
+         <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;">
+			    สังกัด:
+		    </label>
+		    <div class="controls">
+			    @Model.Dept.Dept_Name_En
+		    </div>         
+	    </div>
+         <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;">
+			    กลุ่มที่:
+		    </label>
+		    <div class="controls">
+			    @Model.Group_Id
+		    </div>         
+	    </div>
+         <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;">
+			    สถานะ:
+		    </label>
+		    <div class="controls">
+			    @Model.Status()
+		    </div>         
+	    </div>
+     }
+</div>
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

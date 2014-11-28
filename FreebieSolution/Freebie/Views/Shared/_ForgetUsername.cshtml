@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Freebie - ฟรีบี้ *115 โทรฟรี</title>
+	@Styles.Render("~/Content/bootstrap.css")
+	@Styles.Render("~/Content/bootstrap-responsive.css")
+	@Styles.Render("~/Content/Freebie.css")
+    @Styles.Render("~/Content/freebie-style.css")
+    @Styles.Render("~/Content/axurerp_pagespecificstyles.css")
+    @Styles.Render("~/Content/axurerp_pagespecificstyles_ie6.css")
+	@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/disable_autocomplete.js")
+	@Scripts.Render("~/Scripts/bootstrap.js")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scripts/google_analytics.js")
+</head>
+<body>
+    @Html.Partial("~/Views/Shared/_Topbanner.cshtml")
+    <div style='width:960px;margin:auto;'>
+        <div style='margin: 20px 20px 0 0;text-align:right;'>
+           <a href="http://www.freebie.co.th" target="_blank" class="btn-primary btn-orange">กลับสู่หน้าหลัก</a>
+        </div>    
+    </div>
+    <div style='clear:both;'></div>
+    <div id="header">
+        <div id="innerheader">
+            @Html.Partial("~/Views/Shared/_Header.cshtml")
+            @Html.Partial("~/Views/Shared/_Topbanner.cshtml")
+			
+        </div>
+    </div>
+    
+	<div id="wrapper">
+		<div class="page-title">
+			<h3 class="center-text pink-text">สมาชิกลืมอีเมล์</h3>
+		</div>
+        <div class = "clear"></div>
+		<div id="content">
+			<div class="tabbable tabs-left" id="register-page-nav">
+			  <div class="register-step-header-container White Shadow">
+                  <div class="register-step-header-text">
+                        <div class="text-center">
+                            ขั้นตอนการขอชื่อบัญชีใหม่
+                        </div>
+                  </div>            
+              </div>
+              <div class="register-step-container Shadow @(ViewBag.Step == 1 ? "pink-active" : "")">
+                  <div class="register-step-text center-text">
+                        <div style="height:32px;">
+                            <p>1. ขอรับรหัสผ่านแบบใช้ครั้งเดียว</p>
+                        </div>
+                  </div>
+              </div>
+              <div class="register-step-container Shadow @(ViewBag.Step == 2 ? "pink-active" : "")">
+                  <div class="register-step-text center-text">
+                        <div>
+                            <p>2. ยืนยันรหัสผ่านแบบใช้ครั้งเดียว</p>
+                        </div>
+                  </div>
+              </div>
+			</div>	
+			<div class="tab-content" id="register-tab-content" style="padding:0 0 20px 20px;">
+					@RenderBody()
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+    @Html.Partial("~/Views/Shared/_Footer.cshtml")
+    @Html.Partial("~/Views/Shared/_GoogleScripts.cshtml")
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

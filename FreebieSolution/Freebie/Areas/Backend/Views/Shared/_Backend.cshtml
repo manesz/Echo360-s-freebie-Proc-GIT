@@ -1,0 +1,196 @@
+﻿@using System.Collections;
+@using Freebie.Libs;
+@{
+    Layout = null;
+
+
+    //HttpCookie cookie = HttpContext.Current.Request.Cookies.Get("freebie");
+    string DeptName = "";
+    string GroupId = "";
+    
+    string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+
+
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    string dept_cd = (Session["Dept"] == null) ? "" : Session["Dept"].ToString(); 
+    
+
+
+    var db = new Freebie.Models.EchoContext();
+
+    Freebie.Models.Dept dept = db.Depts.SingleOrDefault(x => x.Dept_Cd.Equals(dept_cd));
+    if (dept != null)
+    {
+        DeptName = dept.Dept_Name_En;
+    }
+    
+    if (Session["Group_Id"] != null)
+    {
+        GroupId = Session["Group_Id"].ToString();
+    }
+    //Admin config.
+    bool access_admin_config_menu = Permission.access_admin_config_menu();
+    bool access_base_quota_menu = Permission.access_menu(Permission.base_quota_page_id);
+    bool access_free_trial_menu = Permission.access_menu(Permission.free_trial_page_id);
+    bool access_activation_menu = Permission.access_menu(Permission.activation_page_id);
+
+    //Users
+    bool access_users_menu = Permission.access_users_menu();
+    bool access_staff_profile_menu = Permission.access_menu(Permission.staff_profile_page_id);
+    bool access_sup_acct_menu = Permission.access_menu(Permission.sup_acct_page_id);
+    bool access_staff_acct_menu = Permission.access_menu(Permission.staff_acct_page_id);
+    
+    //Search Customer
+    bool access_search_customer_menu = Permission.access_search_customer_menu();
+
+    //Register Customer
+    bool access_register_customer_menu = Permission.access_register_customer_menu();
+    
+    //Report
+    bool access_report_menu = Permission.access_report_menu();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Freebie - ฟรีบี้ *155 โทรฟรี</title>
+      <script type="text/javascript">
+          var base_url = '@Url.Content("~/")';
+    </script>
+	@Styles.Render("~/Content/bootstrap.css")
+	@Styles.Render("~/Content/bootstrap-responsive.css")
+	@Styles.Render("~/Content/Freebie.css")
+    @Styles.Render("~/Content/freebie-style.css")
+    @Styles.Render("~/Content/freebie-backend-style.css")
+    @Styles.Render("~/Content/axurerp_pagespecificstyles.css")
+    @Styles.Render("~/Content/axurerp_pagespecificstyles_ie6.css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Styles.Render("~/Content/jquery-ui-1.10.3.custom.css")
+	@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/jquery-ui-1.10.3.custom.js")
+    @Scripts.Render("~/Scripts/disable_autocomplete.js")
+    @Scripts.Render("~/Scripts/quota.js")
+	@Scripts.Render("~/Scripts/dropdown.js")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scripts/account_profile.js")
+    @Scripts.Render("~/Scripts/google_analytics.js")
+    <style>
+       #top-banner-div { display: none;}
+        .content-area 
+        {
+            width: 100% !important;    
+        }
+        .side-banner 
+        {
+            display:none;    
+        }
+    </style>
+</head>
+<body>
+    <div id="header" style="height: 100px;">
+            <div style='width:960px;margin:auto;'>
+            @Html.Partial("~/Views/Shared/_HeaderBackend.cshtml")
+			<div class="page-title">
+					<span>ระบบจัดการข้อมูลลูกค้า</span>
+			</div>
+			    <div style="float:right;padding-right:20px;">
+                    <div style="padding:5px;">
+                        <p>ชื่อผู้ใช้: @HttpContext.Current.User.Identity.Name</p>
+                        <p>สังกัด: @DeptName</p>
+                        <p>กลุ่มที่:@GroupId</p>
+                        <div style="height:10px;"></div>
+                        <p>@Html.ActionLink("ออกจากระบบ", "Logout", "Authentication", null, new { @class = "btn btn-small btn-warning" })</p>
+                    </div>
+			    </div>
+            </div>
+    </div>
+    <div id="wrapper">
+		<div id="content">
+             <div style="width:100%;text-align:center;">
+			  <ul class="nav nav-pills backend-nav" id="backend-dropdown-menus">
+                 @if (access_report_menu)
+                 { 
+                    <li class ="dropdown @(controller == "SalesPerformanceReport" ? "active" : "")">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> รายงาน</a>
+                        <ul class="dropdown-menu">
+                          <li>@Html.ActionLink("รายงานประสิทธิภาพการขาย", "Index", "SalesPerformanceReport")</li>
+                        </ul>
+				     </li>
+                 }
+                @if (access_register_customer_menu)
+                {
+                        <li class ="dropdown @(controller == "RegisterByAgent" ? "active" : "")">
+                             @Html.ActionLink("ลงทะเบียนลูกค้า", "Index", "RegisterByAgent")
+				        </li>
+                }
+                @if (access_search_customer_menu)
+                {
+                     <li class ="dropdown @(controller == "SearchCustByAgent" ? "active" : "")">
+                         @Html.ActionLink("ข้อมูลลูกค้า", "Index", "SearchCustByAgent")
+				    </li>
+                }
+                @if (access_users_menu)
+                {
+                    <li class ="dropdown @(controller == "User" ? "active" : "")">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> บัญชีผู้ใช้</a>
+                        <ul class="dropdown-menu">
+                          @if (access_staff_profile_menu)
+                          { 
+                             <li>@Html.ActionLink("ข้อมูลผู้ใช้", "StaffProfile", "User")</li>
+                          }
+                          @if (access_sup_acct_menu)
+                          {
+                            <li>@Html.ActionLink("จัดการบัญชีพนักงานระดับหัวหน้า", "SupervisorAcct", "User")</li>
+                          }
+                          @if (access_staff_acct_menu)
+                          {
+                            <li>@Html.ActionLink("จัดการบัญชีพนักงาน", "StaffAcct", "User")</li>
+                          }
+                        </ul>
+				    </li>
+                }
+                
+                @if (access_admin_config_menu)
+                {
+                 <li class ="dropdown @(controller == "AdminConfig" ? "active" : "")">
+                    <a href="#" class="dropdown-toggle" data-toggle ="dropdown"> ตั้งค่าระบบ</a>
+                    <ul class="dropdown-menu">
+                       @if (access_base_quota_menu)
+                       {
+                            <li>@Html.ActionLink("ตั้งค่าโควต้าการโทร", "BaseQuota", "AdminConfig")</li>
+                       }
+                       @if (access_free_trial_menu)
+                       {
+                            <li>@Html.ActionLink("ตั้งค่าโควต้าทดลองใช้งานฟรี", "FreeTrialQuota", "AdminConfig")</li>
+                       }
+                       @if (access_activation_menu)
+                       { 
+                            <li>@Html.ActionLink("ตั้งค่าการเปิดใช้บริการ", "ActivationLimit", "AdminConfig")</li>
+                       }
+                       
+                       <li>@Html.ActionLink("การทำงานเบื้องหลัง", "Index", "Scheduler")</li>
+                    </ul>
+				</li>
+                }
+			  </ul>
+              <div class="clear"></div>
+			</div>	
+			<div style=''>
+                <span class="backend-title" style="text-decoration:none;">@ViewBag.PageName</span>
+					@RenderBody()
+			</div>
+            <div class="clear"></div>
+        </div>
+	</div>
+    @Html.Partial("~/Views/Shared/_Footer.cshtml")
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#backend-dropdown-menus').menu();
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

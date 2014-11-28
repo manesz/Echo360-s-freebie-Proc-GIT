@@ -1,0 +1,119 @@
+﻿@using Freebie.Libs;
+
+@model IEnumerable<Freebie.Models.AccountMobile>
+@{
+    ViewBag.Title = "ViewNumberByAgent";
+    ViewBag.PageName = "ข้อมูลเบอร์โทรศัพท์";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+
+    bool has_permission = Permission.has_permission(Permission.cust_numbers_page_id);
+    bool allow_update = Permission.allow_update(Permission.cust_numbers_page_id);
+}
+
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="width:24%;float:left;position:relative;">
+        @Html.Partial("~/Areas/Backend/Views/Shared/CustomerMenu.cshtml")
+    </div>
+    <div style="width:74%;float:left;">
+        <div class="backend-table-title">
+	        <span>เบอร์โทรศัพท์มือถือของสมาชิก:</span>
+        </div>
+        <table class="border-table" style="width:500px;text-align:center;margin-top:20px;">
+             <thead>
+                <tr style="background:#00EEDD;">
+                    <th style="width:80px;">เบอร์หลัก</th>
+                    <th style="width:140px;">ลำดับที่</th>
+                    <th style="width:150px;">เบอร์โทรศัพท์</th>
+                    <th style="width:65px;">สถานะ</th>
+                    <th style="width:65px;">&nbsp;</th>
+                </tr>
+            </thead>
+            @{var count = 1;}
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.RadioButton("PrimaryNumber", item.Primary_Flag, new { @class = "select-primary-number", style = "margin:0 5px 2px 5px;", data_id = item.Mobile_Number })</td>
+                    <td>เบอร์โทรศัพท์ที่ @count:</td>
+                    <td>@item.Mobile_Number</td>
+                    <td>@item.Status()</td>
+                    <td>
+                       @if (!item.Primary_Flag && allow_update)
+                       { @Html.ActionLink("ลบ", "RemoveNumberByAgent", "SearchCustByAgent", new { phone_number = item.Mobile_Number },
+                                            new { onclick = "return confirm('ยืนยันการลบเบอร์โทรศัพท์ใช่หรือไม่?');" }) }
+                    </td>
+                </tr>
+                       count++;
+            }
+                @if (Model.Count() < 3 && allow_update)
+                {
+                     <tr>
+                        <td></td>
+                        <td>เบอร์โทรศัพท์ที่ @count:</td>
+                        <td></td>
+                        <td></td>
+                        <td>     
+                                      
+                                @Html.ActionLink("เพิ่ม", "AddNumberByAgent", "SearchCustByAgent", new { Account_Id = ViewBag.Account_Id }, null)
+                            
+                        </td>
+                    </tr>
+                }
+        </tbody>
+        </table>
+        @if (allow_update)
+        {
+            <div style="margin-top:40px;text-align:center;width:500px;">
+                <input type="button" value="บันทึก" name="save" style ="" class="btn btn-primary btn-blue" id ="save-button"/>
+            </div>
+        }
+        <div style="margin-top:60px;">
+            @Html.Partial("~/Views/Statics/ViewNumberRemark.cshtml")
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var selected_mobile = "";
+        $('#save-button').hide();
+
+        $('.select-primary-number').each(function (item) {
+            var rdo = $(this);
+            if (rdo.val() == "True") {
+                rdo.attr('Checked', 'Checked');
+                selected_mobile = $(this).attr('data-id');
+            }
+        })
+
+        $('.select-primary-number').on('change', function (e) {
+            var mobile_no = $(this).attr('data-id');
+
+            if (mobile_no != selected_mobile) {
+                $('#save-button').show();
+            }
+            else {
+                $('#save-button').hide();
+            }
+        })
+
+
+        $('#save-button').on('click', function (e) {
+            if (confirm('ยืนยันการบันทึกข้อมูล?')) {
+                var phone_number = $('.select-primary-number').filter(':checked').attr('data-id');
+                $.ajax({
+                    type: "POST",
+                    url: 'ChangePrimaryByAgent',
+                    data: { phone_number: phone_number },
+                    async: false
+                }).done(function () { location.reload(); }).fail(function (data) { console.log(data); location.reload(); });
+            }
+        });
+    });
+</script>
+}
+else
+{ 
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

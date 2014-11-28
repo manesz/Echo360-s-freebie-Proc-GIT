@@ -1,0 +1,92 @@
+﻿@using Freebie.Libs;
+
+@{
+    ViewBag.Title = "AddNumberByAgent";
+    ViewBag.PageName = "ข้อมูลเบอร์โทรศัพท์";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    bool has_permission = Permission.has_permission(Permission.cust_numbers_page_id);
+    bool allow_update = Permission.allow_update(Permission.cust_numbers_page_id);
+    
+}
+@if (has_permission && allow_update)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="width:24%;float:left;position:relative;">
+        @Html.Partial("~/Areas/Backend/Views/Shared/CustomerMenu.cshtml")
+    </div>
+    <div style="width:74%;float:left;">
+        <div class="title-accInfo">
+	        <span>ขอรับรหัสผ่านแบบใช้ครั้งเดียว:</span>
+        </div>
+        <div style="padding:40px;">
+             @using (Html.BeginForm("VerifySubrNumber", "SearchCustByAgent", FormMethod.Post, new { @id = "webfront-accInfo-form-validate-number", @class = "form-horizontal" }))
+             {
+			        <div class="control-group">
+				        <label class="control-label" for="PhoneNumber" style="text-align:left;">หมายเลขโทรศัพท์:</label>
+				        <div class="controls">
+					        @Html.Editor("PhoneNumber")
+				        </div>
+                        @Html.ValidationMessage("PhoneNumber")
+			        </div>
+                    <input type="hidden" name="Account_Id" value="@ViewBag.Account_Id" />
+			        <div style="text-align:center;">
+				        <input type="submit" value="รับรหัสผ่าน" class="btn btn-primary btn-blue"/>
+			        </div>
+             }
+             @if (ViewBag.ResetOTP != null)
+             { 
+                    <div style="text-align:center;">
+                        <span style="color:Red;">@ViewBag.ResetOTP</span>
+                    </div>
+             }
+              @if (@ViewBag.ValidNumber)
+              {
+                  if (ViewBag.ErrorOTP != null)
+                  { 
+                    <div style="text-align:center;">
+                        <span style="color:Red;">@ViewBag.ErrorOTP</span>
+                    </div>
+                  }
+                  if (ViewBag.ShowPwd != null)
+                  { 
+                      <span>
+				            กรุณาใส่รหัสผ่านที่ได้รับทาง SMS เพื่อยืนยันความเป็นเจ้าของหมายเลขโทรศัพท์มือถือ รหัสผ่านของคุณมีอายุใช้งาน @System.Configuration.ConfigurationManager.AppSettings["OTPPwdExpired"] นาที
+			            </span>
+                     @* <span style="font-weight:bold;"> OPT is @ViewBag.OTP</span>*@
+                      using (Html.BeginForm("AddNumberByAgent", "SearchCustByAgent", FormMethod.Post, new { phoneNumber = ViewBag.PhoneNumber, @id = "webfront-add-number-form", @class = "form-horizontal", style = "width:100%;" }))
+                      {
+					                <div style="clear:both;height:50px;"></div>
+					                <div class="control-group" style = "margin-bottom: 0;">
+						                <label class="control-label" for="Password" style="text-align:left;">รหัสผ่าน:</label>
+						                <div class="controls">
+							                @Html.Password("Password")
+						                </div>
+					                </div>
+                                    <input type="hidden" name="Account_Id" value="@ViewBag.Account_Id" />
+                          if (@ViewBag.Error != null)
+                          { 
+                                    <span style="color:red; margin-left: 180px;">@ViewBag.ErrorMessage</span>     
+                          }
+					                <div style="text-align:center;margin-top:40px;">
+						                @Html.ActionLink("ตกลง", "AddNumber", "AccInfo", null, new { @class = "btn btn-primary btn-blue", @id = "webfront-add-number-submit-link" })
+						                @Html.ActionLink("ยกเลิก", "ViewNumberByAgent", "SearchCustByAgent", new { Account_Id = ViewBag.Account_Id }, new { @class = "btn btn-primary btn-blue" })
+					                </div>
+                      }
+                  }
+              }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#webfront-add-number-submit-link').on('click', function (e) {
+            $('#webfront-add-number-form').submit();
+            return false;
+        });
+    });
+</script>
+}
+else
+{ 
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

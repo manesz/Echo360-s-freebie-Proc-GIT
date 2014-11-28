@@ -1,0 +1,125 @@
+@charset "UTF-8";
+/* Freebie Specific Styles */
+
+/*--------------------------*
+/*  Typography
+/*--------------------------*/
+body {
+	color:#808285;
+	font-family:Signika, Helvetica, Arial;
+	font-size:14px;
+	font-weight:400;}
+a {
+	color: #0072bc; 
+	text-decoration: none; }
+a:hover { 
+	color: #00a2ff; 
+	text-decoration: none; }
+	
+.white-text {color:#FFF!important;}
+.black-text {color:#000!important;}
+.center-text {text-align:center!important;}
+.green-text { color: #a7c712!important;}
+.pink-text {color: #ec008b !important;}
+.blue-text {color: #blue !important;}
+@import url(http://fonts.googleapis.com/css?family=Signika:400,300);
+
+
+/*--------------------------*
+/*  Headings
+/*--------------------------*/
+
+h1, h2, h3, h4, h5, h6 { color: #808285; font-family: 'Signika', Arial, sans-serif; font-weight:700; margin-bottom: 9px; margin-top: -3px; text-rendering: optimizelegibility; text-transform: uppercase; }
+h1, h2, h3 { line-height: 1em; }
+h1 { font-size: 68px; }
+h2 { font-size: 58px; }
+h3 { font-size: 48px; }
+h4 { font-size: 38px; }
+h5 {font-size: 24px;}
+h6 { font-size: 16px; }
+
+/*--------------------------*
+/*  Div Background Colours
+/*--------------------------*/
+
+
+/*--------------------------*
+/*  Div Background Colours
+/*--------------------------*/
+
+
+
+.Green .active { background:#8dc63f !important;}
+.pink-active 
+{
+    background:#ec008b !important;
+    color: White;
+}
+.Orange { background:#faa61a !important;}
+.Blue { background:#0072bc !important;}
+.Azure {color: #00a2ff !important;}
+.Cyan { background:#00a2ff !important;}
+.Yellow { background:#ffdd00 !important;}
+.Grey { background:#808285 !important;}
+.White {background:#FFFFFF !important;}
+
+.Rounded {border-radius: 5px !important;}
+.Shadow {-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,0.5);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,0.5);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,0.5);}
+
+
+/*--------------------------*
+/*  Buttons
+/*--------------------------*/
+
+/* Main button styling */
+.btn-orange.active, .btn-blue.active, .btn-warning.active, .btn-danger.active, .btn-success.active, .btn-info.active, .btn-inverse.active { color: rgba(255, 255, 255, 0.75); }
+.btn-primary { background: #f6f6f6; padding:6px 12px; border: 1px solid #bbb; *border: 0;
+border-bottom-color: #a2a2a2; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; border-color: #efefef #efefef #ebebeb; border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25); border-width: 1px 1px 2px; -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.05); -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.05); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.05); text-shadow: 0 1px 1px rgba(255,255,255,0.75); font-size:12px; min-width:75px !important; }
+.btn-primary:hover { text-decoration: none; background-color: #e6e6e6; *background-color: #d9d9d9;
+/* Buttons in IE7 don't get borders, so darken on hover */
+border-width: 2px 1px 1px; -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05); -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05); box-shadow: 0 1px 2px rgba(0,0,0,.05); /* remove transition as it now doesn't look so good */ background-position: 0; -webkit-transition: none; -moz-transition: none; -o-transition: none; transition: none; }
+
+/* Orange */
+.btn-orange { background-color: #faa61a!important; border-color: #f7ac89 #f7ac89 #e49874; border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); color: #FFF; text-shadow: 0 1px 0 rgba(0,0,0,0.55); }
+.btn-orange:hover, .btn-orange:active, .btn-orange.active, .btn-orange.disabled, .btn-orange[disabled] { background-color: #ffdd00!important; color: #333; }
+.btn-orange:active, .btn-orange.active { background-color: #ffb896 \9; border-width: 2px 1px 1px; }
+
+/* Blue */
+.btn-blue { background-color: #00a2ff!important; border-color: #f7ac89 #f7ac89 #e49874; border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); color: #FFF; text-shadow: 0 1px 0 rgba(0,0,0,0.55); }
+.btn-blue:hover, .btn-blue:active, .btn-blue.active, .btn-blue.disabled, .btn-blue[disabled] { background-color: #ffdd00!important; color: #333; }
+.btn-blue:active, .btn-blue.active { background-color: #ffb896 \9; border-width: 2px 1px 1px; }
+
+/*--------------------------*
+/*  Checkbox & Radio Button
+/*--------------------------*/
+
+/* Checkbox */
+.regular-checkbox {
+    -webkit-appearance: none;
+    background-color: #fafafa;
+    border: 1px solid #cacece;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+    padding: 6px;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+}
+.regular-checkbox:active, .regular-checkbox:checked:active {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+.regular-checkbox:checked:after {
+    content: '\2714';
+    font-size: 11px;
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    color: #00a2ff;
+}

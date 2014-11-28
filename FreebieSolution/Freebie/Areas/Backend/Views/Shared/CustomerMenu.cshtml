@@ -1,0 +1,44 @@
+﻿@using Freebie.Libs;
+@{
+    bool has_permission_cust_info = Permission.has_permission(Permission.cust_profile_page_id);
+    bool has_permission_cust_number = Permission.has_permission(Permission.cust_numbers_page_id);
+    bool has_permission_update_info = Permission.has_permission(Permission.update_cust_profile_page_id);
+    bool has_permission_update_username = Permission.has_permission(Permission.update_cust_username_page_id);
+
+    string action_name = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    string[] number_menus = new string[] { "ViewNumberByAgent", "AddNumberByAgent", "VerifySubrNumber" };
+    string[] profile_menus = new string[] { "ViewAcctProfileByAgent", "UpdateAcctProfileByAgent" };  
+    
+    //bool allow_update_username = Permission.allow_update(Permission.update_cust_username_page_id);  
+}
+
+<ul class="backend-acct-menu" style="position:relative; top:-5px;margin-right:20px;">
+    @if (has_permission_cust_info)
+    { 
+        <li class = "@(action_name == "AcctInfoByAgent" ? "active" : "")"> 
+            <span>@Html.ActionLink("ข้อมูลบัญชีสมาชิก", "AcctInfoByAgent", "SearchCustByAgent", new { account_id = ViewBag.Account_Id }, null)</span>
+        </li>
+    }
+    
+    @if (has_permission_cust_number)
+    {
+        <li class = "@(number_menus.Contains(action_name) ? "active" : "")"> 
+            <span>@Html.ActionLink("ข้อมูลเบอร์โทรศัพท์", "ViewNumberByAgent", "SearchCustByAgent", new { account_id = ViewBag.Account_Id }, null)</span>
+        </li>
+    }
+    
+    @if (has_permission_update_info)
+    {
+        <li class = "@(profile_menus.Contains(action_name) ? "active" : "")"> 
+            <span>@Html.ActionLink("ข้อมูลประวัติสมาชิก", "ViewAcctProfileByAgent", "SearchCustByAgent", new { account_id = ViewBag.Account_Id }, null)</span>
+        </li>
+    }
+    
+    @if (has_permission_update_username)
+    {
+        <li class = "@(action_name == "UpdateUsernameByAgent" ? "active" : "")"> 
+            <span>@Html.ActionLink("เปลี่ยนชื่อผู้ใช้", "UpdateUsernameByAgent", "SearchCustByAgent", new { account_id = ViewBag.Account_Id }, null)</span>
+        </li>
+    }
+
+</ul>

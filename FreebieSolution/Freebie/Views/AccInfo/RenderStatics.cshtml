@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "RejectNonAIS";
+    Layout = "~/Views/Shared/_AccInfo.cshtml";
+}
+@if (ViewBag.Type == 1)
+{ 
+    @Html.Partial("../Statics/RejectNonAIS")
+}
+else {
+    if (ViewBag.Type == 2) { 
+        @Html.Partial("../Statics/AddExistingNumber")
+    }else {
+        if (ViewBag.Type == 3) {
+            @Html.Partial("../Statics/ChangeUsername")
+        } else {
+            if (ViewBag.Type == 4) {
+                @Html.Partial("../Statics/ChangePassword")
+            }
+        }
+    } 
+} 

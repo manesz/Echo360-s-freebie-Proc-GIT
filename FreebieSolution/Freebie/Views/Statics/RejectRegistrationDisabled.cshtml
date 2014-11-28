@@ -1,0 +1,29 @@
+﻿@{
+    string side_banner_path = "~/Images/Banners/Side/";    
+}
+<style>
+      
+     .Statics_RejectRegistrationDisabled
+        {
+            background-image: url(@Url.Content(side_banner_path + "Statics_RejectRegistrationDisabled_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: -20px;  
+    
+        }
+      #top-banner-div { background-image: url(@Url.Content("~/Images/Banners/Top/" + "Statics_RejectRegistrationDisabled" + ".png")); }
+</style>
+<div class="title pink-text" style="margin-bottom: 40px;">
+	<span>ผลการดำเนินการ</span>
+</div>
+<div class = "content-area" >
+        <p>
+            ขณะนี้เป็นช่วงเวลาปิดระบบการสมัครสมาชิก กรุณาเข้ามาลงทะเบียนใหม่อีกครั้ง
+        </p>
+        <div style="text-align:center;margin-top:40px;">
+            <a href="@ViewBag.Path" class="btn btn-primary btn-blue">กลับสู่หน้าหลัก</a>
+        </div>
+</div>
+ <div class = "side-banner Statics_RejectRegistrationDisabled">
+
+</div>

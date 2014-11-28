@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+	<title>ServiceAgreement</title>
+    @Styles.Render("~/Content/Freebie.css")
+    @Styles.Render("~/Content/freebie-style.css")
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+    @if (ViewBag.Type == 1) {
+        @Html.Partial("~/Views/Statics/EULA.cshtml")
+    }
+    else
+    {
+        if (ViewBag.Type == 2)
+        { 
+            @Html.Partial("~/Views/Statics/EULA.cshtml")
+        }
+    }
+</body>
+</html>

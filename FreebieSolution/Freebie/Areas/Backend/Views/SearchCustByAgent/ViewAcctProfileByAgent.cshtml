@@ -1,0 +1,429 @@
+﻿@using Freebie.Libs;
+@model Freebie.Models.Account
+@{
+    ViewBag.Title = "ViewAcctProfileByAgent";
+    ViewBag.PageName = "ข้อมูลประวัติลูกค้า";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+
+    bool has_permission = Permission.has_permission(Permission.update_cust_profile_page_id);
+    bool allow_update = Permission.allow_update(Permission.update_cust_profile_page_id);
+    var quotas = ViewBag.Quotas;
+    var score = 0;
+    var xscore = 0;
+    if (ViewBag.Score != null)
+    {
+        xscore = ViewBag.Score;
+    }
+}
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="width:24%;float:left;position:relative;">
+        @Html.Partial("~/Areas/Backend/Views/Shared/CustomerMenu.cshtml")
+        <div class="register-step-quota-container Shadow" style="width:198px;">
+                  <div>
+                        <div class="register-step-quota-text center-text">
+                            <div style="margin-bottom:20px;"><p>สิทธิ์โทรฟรี:</p></div>
+                            <div class="register-quota-type-container" style="margin-left:15px">
+                                    <div class="Rounded" style="border: 1px solid #808285;">
+                                        <div class="register-quota-type-text">
+                                            <div class="center-text">
+                                                <p style="padding-top:5px;">โทรฟรี</p>
+                                                <p><span id="preview-quota-freq" class ="pink-text" style="font-size: 22px; font-weight:bold;">0</span>  </p>
+                                                <p style="padding-bottom:5px;">ครั้งต่อวัน</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="register-quota-type-container" style="margin-left:20px;margin-right:15px;">
+                                    <div class="Rounded" style="border: 1px solid #808285;">
+                                        <div class="register-quota-type-text">
+                                            <div class="center-text">
+                                                <p style="padding-top:5px;">โทรฟรี </p>
+                                                <p><span id="preview-quota-dur" class ="pink-text" style="font-size: 22px; font-weight:bold;">0</span></p>
+                                                <p style="padding-bottom:5px;"> นาทีต่อครั้ง</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="clear" style="height:30px;"></div>
+                            <div class="meter-gauge">
+                                    <div id="mark-min-quota">0</div>
+                                    <div id="mark-mid-quota">0</div>
+                                    <div id="mark-max-quota">0</div>
+                                    <img id= "meter-gauge-img" src="@Url.Content("~/Images/register/dial_0.png")" width="120" height="120">
+                                </div>
+                                <div class="meter-footer">
+                                        <p>นาทีโทรฟรีต่อ</p>
+                                        <p>เดือน</p>
+                                </div>
+                        </div>
+                  </div>
+              </div>
+    </div>
+    <div style="width:74%;float:left;margin-left:10px;">
+        <span style="margin-bottom:20px; display:block;">
+		    กรุณาระบุข้อมูลสมาชิกเพื่อรับข้อมูลข่าวสารที่ตรงกับไลฟ์สไตล์ของคุณ
+        </span>
+        <div class="backend-table-title" style="width:100%;">
+	        <span>ข้อมูลส่วนตัว</span>     
+                @if (allow_update)
+                {     
+                    @Html.ActionLink("แก้ไข", "UpdateAcctProfileByAgent", "SearchCustByAgent", new { Account_Id = Model.Account_Id }, new { style = "float:right;" })
+                }
+        </div>
+
+        <div style="margin: 0 20px 0 20px;">
+            <table style="line-height:40px;">
+                <tr>
+                    <td style="width:160px;">ชื่อ:</td>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(Model.First_Name))
+                        { 
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.First_Name)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">นามสกุล:</td>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(Model.Last_Name))
+                        { 
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.Last_Name)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">วันเดือนปีเกิด:</td>
+                    <td> @Html.Raw("วัน:") @Html.DropDownList("Day_Of_Birth", null, new { @disabled = "disabled", style = "width:60px;height:25px;margin-bottom:2px;" })
+				         @Html.Raw("เดือน:") @Html.DropDownList("Month_Of_Birth", null, new { @disabled = "disabled", style = "width:120px;height:25px;margin-bottom:2px;" })
+				         @Html.Raw("ปี:") @Html.DropDownList("Year_Of_Birth", null, new { @disabled = "disabled", style = "width:80px;height:25px;margin-bottom:2px;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">เพศ:</td>
+                    <td>  @Html.DisplayFor(item => item.Gender.Gender_Name_Th)</td>
+                </tr>   
+                <tr>
+                    <td style="width:160px;">รายได้ครัวเรือนต่อเดือน:</td>
+                    <td> 
+                        @if (string.IsNullOrWhiteSpace(Model.Income_Range_Cd))
+                        {
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.IncomeRange.Income_Range_Desc_Th)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">รายได้ส่วนตัวต่อเดือน:</td>
+                    <td> 
+                        @if (string.IsNullOrWhiteSpace(Model.Personal_Income_Range_Cd))
+                        {
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.PersonalIncomeRange.Personal_Income_Range_Desc_Th)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">อาชีพ:</td>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(Model.Occupation_Cd))
+                        {
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.Occupation.Occupation_Name_Th)
+                            if (!string.IsNullOrWhiteSpace(Model.Income_Range_Cd))
+                            {
+                                score += 1;
+                            }
+                        }   
+                   </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">การศึกษา:</td>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(Model.Education_Cd))
+                        {
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.Education.Education_Name_Th)
+                            score += 1;
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">สถานะ:</td>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(Model.Marital_Status_Cd))
+                        {
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.MaritalStatus.Marital_Status_Name_Th)
+                        }
+                    </td>
+                </tr>
+                 
+                <tr>
+                    <td style="width:160px;">มีบุตร:</td>
+                    <td> 
+                        @if (Model.Children_Flag != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(Model.Marital_Status_Cd))
+                            {
+                                score += 1;
+                            }
+
+                            if (Model.Children_Flag.Equals("Y"))
+                            {
+                                 @Html.Raw("มี")
+                            }
+                            else
+                            {   
+                                @Html.Raw("ไม่มี")
+                            }
+                        }
+                        else
+                        { 
+                            @Html.Raw("-")
+                        }
+                    </td>
+                </tr>
+                @if (Model.Children_Flag != null)
+                {
+                    if (Model.Children_Flag.Equals("Y"))
+                    {
+                        if (Model.Year_Of_Birth_Child1 != null)
+                        { 
+                            <tr>
+                                <td><span style="margin-left:20px;">บุตรคนที่ 1: </span></td>
+                                <td>
+                                    @if (Model.Year_Of_Birth_Child1 == DateTime.Now.Year)
+                                    {
+                                        @Html.Raw("< 1 ปี")
+                                    }
+                                    else
+                                    {
+                                        if ((DateTime.Now.Year - Model.Year_Of_Birth_Child1) > 18)
+                                        {
+                                            @Html.Raw("18+")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(DateTime.Now.Year - Model.Year_Of_Birth_Child1 + " ปี")
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                        if (Model.Year_Of_Birth_Child2 != null)
+                        { 
+                            <tr>
+                                <td><span style="margin-left:20px;">บุตรคนที่ 2: </span> </td>
+                                <td>
+                                    @if (Model.Year_Of_Birth_Child2 == DateTime.Now.Year)
+                                    {
+                                        @Html.Raw("< 1 ปี")
+                                    }
+                                    else
+                                    {
+                                        if ((DateTime.Now.Year - Model.Year_Of_Birth_Child2) > 18)
+                                        {
+                                            @Html.Raw("18+")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(DateTime.Now.Year - Model.Year_Of_Birth_Child2 + " ปี")
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                        if (Model.Year_Of_Birth_Child3 != null)
+                        { 
+                            <tr>
+                                <td><span style="margin-left:20px;">บุตรคนที่ 3: </span></td>
+                                <td>
+                                    @if (Model.Year_Of_Birth_Child3 == DateTime.Now.Year)
+                                    {
+                                        @Html.Raw("< 1 ปี")
+                                    }
+                                    else
+                                    {
+                                        if ((DateTime.Now.Year - Model.Year_Of_Birth_Child3) > 18)
+                                        {
+                                            @Html.Raw("18+")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(DateTime.Now.Year - Model.Year_Of_Birth_Child3 + " ปี")
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                }
+                <tr>
+                    <td style="width:160px;">ที่อยู่ปัจจุบัน:</td>
+                    <td> 
+                        @if (string.IsNullOrWhiteSpace(Model.ZipCode))
+                        {
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                           @Html.Raw(ViewBag.District) @Html.Raw(" ") @Html.DisplayFor(item => item.ZipCode)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:160px;">หมายเลขบัตรประชาชน:</td>
+                    <td> 
+                        @if (string.IsNullOrEmpty(Model.Identification_Number))
+                        {
+                            @Html.Raw("-")
+
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(item => item.Identification_Number)
+                            score += 1;
+                            
+                        }
+                    </td>
+                </tr>
+            </table>
+            <div style="margin:20px 0 40px -20px;">
+		<div class="title" style="width:100%;margin-bottom: 20px;">
+			<span>สิ่งที่สนใจ (เลือกได้มากกว่า 1 ข้อ)</span>
+		</div>	
+         @if (ViewBag.InterestSelected != null)
+         {
+             if (ViewBag.InterestSelected.Count > 0)
+             {
+                 score += 1;
+             }
+         }
+         @{int item_no = 1;}	
+                <div style="width:280px; float:left; margin-bottom: 20px;">
+				    @foreach (var item in ViewBag.Interests)
+        {
+
+            if (item_no <= (ViewBag.Interests.Count / 2))
+            { 
+                                                        <div style="margin-bottom:10px;">
+                                                                @if (ViewBag.InterestSelected.Contains(@item.Interest_Cd))
+                                                                { 
+						                                                    <input type="checkbox" 
+                                                                                name="selectedInterests" 
+                                                                                value="@item.Interest_Cd" 
+                                                                                checked ="checked"
+                                                                                disabled="disabled" style="margin: 0 10px;" />
+						                                                    @(ViewData.Eval("Model.item.Interest_Cd"))@Html.Raw(@item.Interest_Name_Th)
+				                            
+                                                                }
+                                                                else
+                                                                { 
+                                            
+						                                                    <input type="checkbox" 
+                                                                                name="selectedInterests" 
+                                                                                value="@item.Interest_Cd" 
+                                                                                disabled="disabled" style="margin: 0 10px;" />
+						                                                    @(ViewData.Eval("Model.item.Interest_Cd"))@Html.Raw(@item.Interest_Name_Th)
+				                            
+                                                                }
+                                                        </div>      
+            }
+            else
+            {
+                break;
+            }
+
+            item_no += 1;
+        }
+                            </div>
+                            @{ item_no = 1;}	
+                            <div style="width:280px; float:right; margin-bottom: 20px;">
+                                @foreach (var item in ViewBag.Interests)
+                                {
+
+                                    if (item_no > (ViewBag.Interests.Count / 2))
+                                    { 
+                                            <div style="margin-bottom:10px;">
+                                                    @if (ViewBag.InterestSelected.Contains(@item.Interest_Cd))
+                                                    { 
+						                                        <input type="checkbox" 
+                                                                    name="selectedInterests" 
+                                                                    value="@item.Interest_Cd" 
+                                                                    checked ="checked"
+                                                                    disabled="disabled" style="margin: 0 10px;" />
+						                                        @(ViewData.Eval("Model.item.Interest_Cd"))@Html.Raw(@item.Interest_Name_Th)
+				                            
+                                                    }
+                                                    else
+                                                    { 
+                                            
+						                                        <input type="checkbox" 
+                                                                    name="selectedInterests" 
+                                                                    value="@item.Interest_Cd" 
+                                                                    disabled="disabled" style="margin: 0 10px;" />
+						                                        @(ViewData.Eval("Model.item.Interest_Cd"))@Html.Raw(@item.Interest_Name_Th)
+				                            
+                                                    }
+                                            </div>                   
+                                    }
+                                    item_no += 1;
+                                }
+                             </div>	
+       
+                </div>
+        </div>
+    </div>
+</div>
+<ul id="quotas-table" style="display:none;">  
+    <li id="low" data-freq-val ='@quotas["low"].Quota_Freq_Val' data-dur-val = '@quotas["low"].Quota_Dur_Val'></li>
+    <li id="medium" data-freq-val ='@quotas["medium"].Quota_Freq_Val' data-dur-val = '@quotas["medium"].Quota_Dur_Val'></li>
+    <li id="high" data-freq-val ='@quotas["high"].Quota_Freq_Val' data-dur-val = '@quotas["high"].Quota_Dur_Val'></li>
+</ul>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var img = $('#meter-gauge-img');
+        var score = "@xscore";
+        var src = base_url + "Images/register/" + "dial_" + score + ".png"
+        img.attr("src", src);
+
+        pfreq = $('#preview-quota-freq');
+        pdur = $('#preview-quota-dur');
+
+        pfreq.text("@ViewBag.Quota_Freq_Val");
+        pdur.text("@ViewBag.Quota_Dur_Val");
+    })
+</script>    
+}
+else
+{
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

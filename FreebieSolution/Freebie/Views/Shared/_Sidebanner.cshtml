@@ -1,0 +1,225 @@
+﻿@{
+    string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    string action = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    string class_for_banner = "";
+    string margin = "";
+    string side_banner_path = "~/Images/Banners/Side/";
+    string top_banner_name = "";
+    if (!string.IsNullOrWhiteSpace(controller) && !string.IsNullOrWhiteSpace(action))
+    {
+        class_for_banner = controller + "_" + action;
+        if (class_for_banner.Equals("Users_RegisterByCust"))
+        {
+            margin = "side-banner-up";
+        }
+
+        if (class_for_banner.Equals("Users_RegisterUsername"))
+        {
+            margin = "side-banner-up";
+        }
+
+        if (class_for_banner.Equals("AccInfo_VerifySubrNumber"))
+        {
+            margin = "side-banner-up";
+        }
+    }
+}
+<style>
+    
+    .Users_RegisterByCust
+        {
+            background-image: url(@Url.Content(side_banner_path + "Users_RegisterByCust_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;    
+    
+        }
+    .Users_VerifySubrNumber
+        {
+            background-image: url(@Url.Content(side_banner_path + "Users_RegisterByCust_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto; 
+            margin-top: -40px;   
+    
+        }
+    .Users_RegisterUsername
+        {
+            background-image: url(@Url.Content(side_banner_path + "Users_RegisterUsername_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;    
+    
+        }
+    .Users_RegisterProfile
+        {
+            float: right;
+            width: 150px;
+            min-height: 300px;
+            display: inline;
+            background-image: url(@Url.Content(side_banner_path + "Users_RegisterProfile_150.png")); 
+            background-repeat: no-repeat; 
+            background-size: 150px auto;  
+            margin-top: -40px;  
+    
+        }
+    .Users_CreateAccount
+        {
+            float: right;
+            width: 150px;
+            min-height: 300px;
+            display: inline;
+            background-image: url(@Url.Content(side_banner_path + "Users_RegisterProfile_150.png")); 
+            background-repeat: no-repeat; 
+            background-size: 150px auto;  
+            margin-top: -20px;  
+    
+        }
+    .Users_ForgotUsername
+        {
+            background-image: url(@Url.Content(side_banner_path + "Users_ForgotUsername_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;    
+    
+        }
+    .Users_ForgotPassword
+        {
+            background-image: url(@Url.Content(side_banner_path + "Users_ForgotPassword_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;    
+    
+        }
+
+    .AccInfo_Index
+        {
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_Index_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;    
+    
+        }
+    .AccInfo_ViewNumber
+        {
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_ViewNumber_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: 20px;  
+    
+        }
+    .AccInfo_AddNumber
+        {
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_AddNumber_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: 0;  
+    
+        }
+    .AccInfo_VerifySubrNumber
+        {
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_AddNumber_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: 0px;  
+    
+        }
+    .AccInfo_ViewAccProfile
+        {
+            float: right;
+            width: 150px;
+            min-height: 300px;
+            display: inline;
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_ViewAccProfile_150.png")); 
+            background-repeat: no-repeat; 
+            background-size: 150px auto;  
+            margin-top: -20px;  
+    
+        }
+
+    .AccInfo_UpdateAccProfile
+        {
+            float: right;
+            width: 150px;
+            min-height: 300px;
+            display: inline;
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_UpdateAccProfile_150.png")); 
+            background-repeat: no-repeat; 
+            background-size: 150px auto;  
+            margin-top: -20px;  
+    
+        }
+     .AccInfo_ChangeUsername
+        {
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_ChangeUsername_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: 20px;  
+    
+        }
+    .AccInfo_ChangePassword
+        {
+            background-image: url(@Url.Content(side_banner_path + "AccInfo_ChangePassword_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: 20px;  
+    
+        }
+   
+    @{
+        
+        switch (class_for_banner)   {
+            case "Users_RegisterByCust":
+                top_banner_name = "Users_RegisterByCust";
+                break;
+            case "Users_VerifySubrNumber":
+                top_banner_name = "Users_RegisterByCust";
+                break;
+            case "Users_RegisterUsername":
+                top_banner_name = "Users_RegisterUsername";
+                break;
+            case "Users_RegisterProfile":
+                top_banner_name = "Users_RegisterProfile";
+                break;
+            case "Users_CreateAccount":
+                top_banner_name = "Users_RegisterProfile";
+                break;
+            case "Users_ForgotUsername":
+                top_banner_name = "Users_ForgotUsername";
+                break;
+            case "Users_ForgotPassword":
+                top_banner_name = "Users_ForgotPassword";
+                break;
+            case "AccInfo_Index":
+                top_banner_name = "AccInfo_Index";
+                break;
+            case "AccInfo_ViewNumber":
+                top_banner_name = "AccInfo_ViewNumber";
+                break;
+            case "AccInfo_AddNumber":
+                top_banner_name = "AccInfo_AddNumber";
+                break;
+            case "AccInfo_VerifySubrNumber":
+                top_banner_name = "AccInfo_AddNumber";
+                break;
+            case "AccInfo_ViewAccProfile":
+                top_banner_name = "AccInfo_ViewAccProfile";
+                break;
+            case "AccInfo_UpdateAccProfile":
+                top_banner_name = "AccInfo_ViewAccProfile";
+                break;
+            case "AccInfo_ChangeUsername":
+                top_banner_name = "AccInfo_ChangeUsername";
+                break;
+            case "AccInfo_ChangePassword":
+                top_banner_name = "AccInfo_ChangePassword";
+                break;
+            default:
+                top_banner_name = "top_banner";
+                break;
+             
+            
+        }
+        
+    }
+    #top-banner-div { background-image: url(@Url.Content("~/Images/Banners/Top/" + top_banner_name + ".png")); }
+</style>
+
+<div class = "side-banner @class_for_banner @margin">
+
+</div>
+

@@ -1,0 +1,80 @@
+﻿@model Freebie.Models.Account 
+@{
+    Layout = "~/Views/Shared/_AccInfo.cshtml";
+}
+<div class="title-accInfo pink-text">
+	<span>ข้อมูลส่วนตัว</span>
+</div>
+<div class = "content-area">
+  <table style="width:100%;">
+  @*  <tr style="height:30px;">
+        <td style="width:240px;">หมายเลขสมาชิก:</td>
+        <td>@Html.DisplayFor(model => model.Account_No)</td>
+    </tr>*@
+    <tr style="height:30px;">
+        <td style="width:240px;">ชื่อผู้ใช้บริการ Online:</td>
+        <td>@Html.DisplayFor(model => model.User_Name)</td>
+    </tr>
+    <tr style="height:30px;">
+        <td style="width:240px;">สถานะสมาชิก:</td>
+        <td>@Model.Status()</td>
+    </tr>
+    <tr style="height:30px; border-bottom: 1px solid #999;">
+        <td style="width:240px;">ชื่อ - นามสกุล:</td>
+        <td>
+            @if (string.IsNullOrWhiteSpace(Model.First_Name) && string.IsNullOrWhiteSpace(Model.Last_Name))
+                        { 
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(model => model.First_Name) @Html.Raw(" ") @Html.DisplayFor(model => model.Last_Name)
+                        }
+        </td>
+    </tr>
+    <tr style="height:30px;">
+        <td style="width:240px;">เบอร์โทรศัพท์ (เบอร์หลัก):</td>
+        <td>@ViewBag.PNumber</td>
+    </tr>
+    <tr style="height:30px; border-bottom: 1px solid #999;">
+        <td style="width:240px;">เบอร์โทรศัพท์ (เบอร์รอง):</td>
+        <td>
+            @if (string.IsNullOrEmpty(ViewBag.SNumber))
+            {
+                @Html.Raw("-")
+            }
+            else
+            { 
+                @ViewBag.SNumber;
+            }
+        </td>
+    </tr>
+    <tr style="height:30px;">
+        <td style="width:240px;">สิทธิ์โทรฟรี:</td>
+        <td>
+            @if (ViewBag.Freq != null)
+            {
+                @Html.Raw(ViewBag.Freq + " ครั้งต่อวัน ครั้งละ " + ViewBag.Dur + " นาที")
+            }
+            else { 
+                @Html.Raw("-")
+            }
+        </td>
+    </tr>
+    <tr style="height:30px;">
+        <td style="width:240px;">สิทธิ์โทรฟรีคงเหลือของวันนี้ (ครั้ง):</td>
+        <td>
+            @if (@ViewBag.Remaining != null)
+            { 
+                @Html.Raw(ViewBag.Remaining)
+            }
+            else
+            { 
+                @Html.Raw("-")
+            }
+        </td>
+    </tr>
+  </table>
+</div>
+ @Html.Partial("~/Views/Shared/_Sidebanner.cshtml")
+

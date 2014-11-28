@@ -1,0 +1,198 @@
+﻿body {
+	background: rgb(240,240,240);
+	
+}
+
+ul {margin: 0; padding: 0;}
+
+#content 
+{
+	margin: 0 auto;
+	padding: 40px;	
+}
+
+
+#wrapper 
+{
+	width: 960px;
+	margin: 0 auto;
+	min-height: 480px;
+	background: #fff;
+	margin-top: 20px;
+	padding-bottom: 40px;
+}
+
+.clear 
+{
+	clear:both;	
+}
+
+
+#header
+{
+	height: 70px;
+	padding: 20px;
+}
+
+.login-logo
+{
+	margin-bottom: 40px;
+	float:left;
+}
+
+.page-title
+{
+	float:left;
+	/*width:350px;*/
+	height: 70px;
+	margin-bottom: 40px;
+	margin-left:20px;	
+}
+
+.page-title span 
+{
+	display:block;
+	color: #999;
+	line-height: 70px;
+	font-size: 28px;
+	position: relative; 
+    bottom: -12px;
+    font-weight: bold;
+	font-style: italic;
+}
+.user-profile
+{
+	display: inline;
+	float:right;	
+}
+.shadow-border 
+{
+	-webkit-box-shadow: 0 0 6px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0 0 6px rgba(0,0,0,0.3);
+	box-shadow: 0 0 6px rgba(0,0,0,0.3);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+
+}
+
+#login-form 
+{
+	
+	background: #fff;
+	width: 580px;
+	margin: 40px auto;
+	padding: 40px;	
+}
+
+a.login-action-link 
+{
+	margin: 0;
+	text-decoration: none;	
+	display:block;
+	float:left;
+	width:150px;
+}
+
+#register-page-nav
+{
+	width: 197px;
+	float:left;
+	margin-right:20px;
+}
+.instruction-header
+{
+	background: #ddd;
+	width:196px;
+	height: 52px;
+	line-height: 52px;
+	text-align:center;
+	border: 1px solid black;
+	border-bottom: 0;	
+	font-weight: bold;
+}
+
+.side-nav 
+{
+	
+}
+
+.side-nav li
+{
+	list-style-type:none;
+	border: 1px solid black;
+	width: 196px;
+	text-align:center;
+	min-height: 100px;
+	padding-top: 50px;
+}
+
+.tab-menu.active 
+{
+	background: #eee;
+}
+
+.tab-content
+{
+	float:left;
+	width: 640px;
+}
+
+.title
+{
+	border-bottom: 1px solid black;	
+	margin-bottom: 60px;
+}
+
+.title-accInfo
+{
+	border-bottom: 1px solid black;	
+}
+
+.title span
+{
+	font-size: 18px;
+	font-weight: bold;
+		
+}
+
+.required
+{
+	font-size: 13px;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+	color: #FF0000;	
+	margin-right: 10px;
+}
+
+.custom-error-message 
+{
+    display: none;
+    margin-left:180px;
+    margin-bottom:0;
+    color: red;
+}
+.field-validation-error
+{
+    margin-left:180px;
+    color: red;
+}
+
+.accInfo-menu
+{
+    width:200px; 
+    float:left;   
+}
+.accInfo-nav
+{
+  list-style-type:none;  
+}
+.accInfo-nav li
+{
+    text-align:center;
+    line-height: 30px;    
+}
+
+.border-table tr td, th {border: 1px solid black;}
+

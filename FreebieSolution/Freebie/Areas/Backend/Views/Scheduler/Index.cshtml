@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Scheduler";
+    ViewBag.PageName = "การทำงานเบื้องหลัง";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    bool has_permission = role_cd.Equals("AM");  
+}
+
+<div class="backend-table-title">
+	<span>ส่งข้อความยืนยันการลงทะเบียน</span>     
+    
+</div>
+@if (has_permission)
+{
+
+
+
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Login.cshtml";
+}
+<div id="login-form" class ="shadow-border @(string.IsNullOrEmpty(ViewBag.LoginError) ? "" : "error")">
+		<div class="login-header">
+            <div style="float:left;">
+                <a href="http://www.freebie.co.th"> <img src="@Url.Content("~/Images/u0_normal.png")" width = "150" height = "50" /> </a>
+            </div>
+            <div style="float:right; line-height:60px;">
+                 <span style="color:#999; font-size: 22px;">เข้าสู่ระบบ</span>
+            </div>
+        </div>
+		<div class="clear"></div>
+        @if (!string.IsNullOrEmpty(ViewBag.LoginError))
+        {
+                 <div class="login-alert" style="text-align:center;">
+					   <p>@ViewBag.LoginError</p>      
+                </div>
+        }
+		 @using (Html.BeginForm("ValidateUser", "Authentication", FormMethod.Post, new { @id = "webfront-login-form", @class = "" }))
+			{ 
+				<div class="control-group">
+					<label class="control-label" for="UserName">ชื่อผู้ใช้</label>
+					<div class="controls">
+						@Html.Editor("UserName")
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="Password">รหัสผ่าน</label>
+					<div class="controls">
+						@Html.Password("Password")	
+					</div>
+				</div>
+               <div style="text-align:center;">
+                        <input type="submit" value="เข้าสู่ระบบ" class ="btn btn-primary", id = "webfront-login-link" />	
+			   </div>	
+				
+			}
+            <div style="margin-bottom:-20px; text-align:right;">
+                @System.Configuration.ConfigurationManager.AppSettings["APP_VERSION"]
+            </div>
+	</div>
+ 

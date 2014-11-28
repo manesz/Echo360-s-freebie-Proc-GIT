@@ -1,0 +1,57 @@
+﻿@model Freebie.Models.User 
+@{
+    ViewBag.Title = "UpdateStaffPwd";
+    ViewBag.PageName = "ข้อมูลผู้ใช้";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+}
+<div class="backend-table-title">
+	<span>เปลี่ยนรหัสผ่าน:</span>   
+</div>
+<div style="margin: 20px 20px 0 20px;">
+    @using (Html.BeginForm("UpdateStaffPwd", "User", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-horizontal", style = "width:100%;" }))
+    {
+        
+        if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+                <div class="alert alert-error" style="width:45%;text-align:center;">
+					   @ViewBag.Error     
+                </div>
+        }
+      
+        <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;width:200px;">
+			    รหัสผ่านเดิมของคุณ:
+		    </label>
+		    <div class="controls">
+			    @Html.Password("CurrentPassword")
+		    </div>         
+	    </div>
+        <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;width:200px;">
+			    รหัสผ่านใหม่ของคุณ:
+		    </label>
+		    <div class="controls">
+			    @Html.Password("NewPassword")
+		    </div>         
+	    </div>
+
+        <div class="control-group">
+		    <label class="control-label" for="First_Name" style="text-align:left;width:200px;">
+			    กรุณายืนยันรหัสผ่านใหม่ของคุณ:
+		    </label>
+		    <div class="controls">
+			    @Html.Password("ConfirmNewPassword")
+		    </div>         
+	    </div>
+        <div style="margin-top:20px;text-align:center;width:80%;">
+				<input type="submit" id="register-profile-submit" value="บันทึก" class="btn btn-primary btn-blue"/>
+                @Html.ActionLink("ยกเลิก", "StaffProfile", "User", new { },
+                    new
+                    {
+                        @class = "btn btn-primary btn-blue"
+                    })
+        </div>
+        
+    }
+</div>
+

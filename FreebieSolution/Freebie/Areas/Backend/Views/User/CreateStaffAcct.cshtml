@@ -1,0 +1,81 @@
+﻿@using Freebie.Libs;
+
+@model Freebie.Models.User 
+@{
+    ViewBag.Title = "CreateStaffAcct";
+    ViewBag.PageName = "จัดการบัญชีพนักงาน";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    bool has_permission = Permission.has_permission(Permission.staff_acct_page_id);
+}
+<div class="backend-table-title">
+	<span>สร้างบัญชีพนักงาน</span>   
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    @using (Html.BeginForm("CreateStaffAcct", "User", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-horizontal", style = "width:100%;" }))
+    { 
+         if (!Html.ViewData.ModelState.IsValid)
+      {
+                <div class="alert alert-error" style="width:620px;">
+					    @Html.ValidationSummary()           
+                </div>
+      }
+        <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					ชื่อ:
+				</label>
+				<div class="controls">
+					@Html.Editor("First_Name")                   
+				</div>
+                @Html.ValidationMessageFor(model => model.First_Name)
+		</div>
+        <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					นามสกุล:
+				</label>
+				<div class="controls">
+					@Html.Editor("Last_Name")                   
+				</div>
+                @Html.ValidationMessageFor(model => model.Last_Name)
+		</div>
+        <div class="control-group">
+				<label class="control-label" for="Marital_Status_Cd" style="text-align:left;">
+					สังกัด:
+				</label>
+				<div class="controls">
+					@Html.DropDownList("Dept_Cd")
+				</div>
+		</div>
+        <div class="control-group">
+				<label class="control-label" for="Marital_Status_Cd" style="text-align:left;">
+					กลุ่ม:
+				</label>
+				<div class="controls">
+					@Html.DropDownList("Group_Id")
+				</div>
+		</div>
+        <div class="control-group">
+				<label class="control-label" for="Marital_Status_Cd" style="text-align:left;">
+					สถานะ:
+				</label>
+				<div class="controls">
+					@Html.DropDownList("Status_Cd")
+				</div>
+		</div>
+        <div style="margin-top:20px;text-align:center;width:80%;">
+				<input type="submit" id="register-profile-submit" value="บันทึก" class="btn btn-primary btn-blue"/>
+                @Html.ActionLink("ยกเลิก", "StaffAcct", "User", null,
+                    new
+                    {
+                        @class = "btn btn-primary btn-blue"
+                    })
+        </div>
+    }
+</div>
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

@@ -1,0 +1,32 @@
+﻿@{
+    string side_banner_path = "~/Images/Banners/Side/";    
+}
+<style>
+      
+     .Statics_RejectExistingAcct
+        {
+            background-image: url(@Url.Content(side_banner_path + "Statics_RejectExistingAcct_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: -20px;  
+    
+        }
+      #top-banner-div { background-image: url(@Url.Content("~/Images/Banners/Top/" + "Statics_RejectExistingAcct" + ".png")); }
+
+</style>
+<div class="title pink-text" style="margin-bottom: 40px;">
+	<span>ผลการดำเนินการ</span>
+</div>
+<div class = "content-area">
+        <p>
+            หมายเลขนี้ไม่สามารถใช้ลงทะเบียนใหม่ได้ กรุณาล๊อคอินเพื่อตรวจสอบสถานะภาพสมาชิก หรือติดต่อ Call center
+        </p>
+        <div style="text-align:center;margin-top:40px;">
+            <a href="@ViewBag.Path" class="btn btn-primary btn-blue">กลับสู่หน้าหลัก</a>
+        </div>
+</div>
+ <div class = "side-banner Statics_RejectExistingAcct">
+
+</div>
+
+

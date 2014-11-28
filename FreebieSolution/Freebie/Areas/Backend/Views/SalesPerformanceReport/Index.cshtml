@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "SalesPerfReport";
+    ViewBag.PageName = "รายงานประสิทธิภาพการขาย";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+}
+<div class="backend-table-title">
+	<span>เงื่อนไขการค้นหา</span>   
+</div>
+<style>
+    img 
+    {
+        margin-left:10px;    
+    }
+</style>
+<div style="margin-top: 20px;">
+    <div class="form-actions" style="width:660px;border: 1px solid #888;">
+        @using (Html.BeginForm("SalesPerfReportResult", "SalesPerformanceReport", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-inline", style = "width:100%;margin:0;" }))
+        {
+            <div style ="height:40px;">
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">ตั้งแต่วันที่:</div>
+                    <div style="float:left;">
+                        <input type="text" id="start_date" name ="start_date" style="width:100px;" value="@ViewBag.start_date"/>
+                    </div>
+                </div>
+                <div style="width:20px;float:left;">&nbsp;</div>
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">ถึงวันที่:</div>
+                    <div style="float:left;">
+                        <input type="text" id="end_date" name ="end_date" style="width:100px;" value="@ViewBag.end_date"/>
+                    </div>
+                </div>
+            </div>
+            <div style ="height:40px;">
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">สังกัด:</div>
+                    <div style="float:left;">
+                        @Html.DropDownList("Dept_Cd")
+                    </div>
+                </div>
+                <div style="width:20px;float:left;">&nbsp;</div>
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">กลุ่มที่:</div>
+                    <div style="float:left;">
+                        @Html.DropDownList("Group_Id")
+                    </div>
+                </div>
+            </div>
+            <div style ="height:40px;">
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">รหัสพนักงาน:</div>
+                    <div style="float:left;">
+                        @Html.DropDownList("User_No")
+                    </div>
+                </div>
+            </div>
+            <div style ="height:30px;text-align:center;">
+                <input type="submit" id="register-profile-submit" value="ค้นหา" class="btn btn-primary btn-blue"/>
+            </div>
+        }
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Group_Id').css('width', '100px');
+        $('#User_No').css('width', '150px');
+        var jq = $.noConflict();
+        $.datepicker.regional['th'] = {
+            closeText: 'ปิด',
+            prevText: '&#xAB;&#xA0;ย้อน',
+            nextText: 'ถัดไป&#xA0;&#xBB;',
+            currentText: 'วันนี้',
+            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+		'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+		'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+            dayNamesShort: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            weekHeader: 'Wk',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 0,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['th']);
+
+        $("#start_date").datepicker({
+            showOn: "button",
+            dateFormat: "dd/mm/yy",
+            buttonImage: '@Url.Content("~/Images/calendar.gif")',
+            buttonImageOnly: true
+        });
+        $("#end_date").datepicker({
+            showOn: "button",
+            dateFormat: "dd/mm/yy",
+            buttonImage: '@Url.Content("~/Images/calendar.gif")',
+            buttonImageOnly: true
+        });
+    })
+</script>

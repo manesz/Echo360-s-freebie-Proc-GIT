@@ -1,0 +1,367 @@
+﻿@using Freebie.Libs;
+@model Freebie.Models.Account
+@{
+    ViewBag.Title = "UpdateAcctProfileByAgent";
+    ViewBag.PageName = "ข้อมูลประวัติลูกค้า";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    var quotas = ViewBag.Quotas;
+    
+    bool has_permission = Permission.has_permission(Permission.update_cust_profile_page_id);
+    bool full_access = Permission.access_all(Permission.update_cust_profile_page_id);
+    bool allow_update = Permission.allow_update(Permission.update_cust_profile_page_id);
+    
+}
+
+@if (has_permission && allow_update)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="width:24%;float:left;position:relative;">
+        @Html.Partial("~/Areas/Backend/Views/Shared/CustomerMenu.cshtml")
+        <div class="register-step-quota-container Shadow" style="width: 198px;">
+                  <div>
+                        <div class="register-step-quota-text center-text">
+                            <div style="margin-bottom:20px;"><p>สิทธิ์โทรฟรี:</p></div>
+                            <div class="register-quota-type-container" style="margin-left:15px">
+                                    <div class="Rounded" style="border: 1px solid #808285;">
+                                        <div class="register-quota-type-text">
+                                            <div class="center-text">
+                                                <p style="padding-top:5px;">โทรฟรี</p>
+                                                <p><span id="preview-quota-freq" class ="pink-text" style="font-size: 22px; font-weight:bold;">0</span>  </p>
+                                                <p style="padding-bottom:5px;">ครั้งต่อวัน</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="register-quota-type-container" style="margin-left:20px;margin-right:15px;">
+                                    <div class="Rounded" style="border: 1px solid #808285;">
+                                        <div class="register-quota-type-text">
+                                            <div class="center-text">
+                                                <p style="padding-top:5px;">โทรฟรี </p>
+                                                <p><span id="preview-quota-dur" class ="pink-text" style="font-size: 22px; font-weight:bold;">0</span></p>
+                                                <p style="padding-bottom:5px;"> นาทีต่อครั้ง</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="clear" style="height:30px;"></div>
+                            <div class="meter-gauge">
+                                    <div id="mark-min-quota">0</div>
+                                    <div id="mark-mid-quota">0</div>
+                                    <div id="mark-max-quota">0</div>
+                                    <img id= "meter-gauge-img" src="@Url.Content("~/Images/register/dial_0.png")" width="120" height="120">
+                                </div>
+                                <div class="meter-footer">
+                                        <p>นาทีโทรฟรีต่อ</p>
+                                        <p>เดือน</p>
+                                </div>
+                        </div>
+                  </div>
+              </div>
+    </div>
+    <div style="width:74%;float:left;margin-left:10px;">
+        <span style="margin-bottom:20px; display:block;">
+		    กรุณาระบุข้อมูลสมาชิกเพื่อรับข้อมูลข่าวสารที่ตรงกับไลฟ์สไตล์ของคุณ
+        </span>
+        <div class="backend-table-title" style="width:100%;">
+	        <span>ข้อมูลส่วนตัว</span>
+        </div>
+        <div style="margin: 0 20px 0 20px;">
+            @using (Html.BeginForm("UpdateAcctProfileByAgent", "SearchCustByAgent", FormMethod.Post, new { @id = "webfront-acc-update-form", @class = "form-horizontal", style = "width:100%;" }))
+            {
+                <div style="clear:both;height:20px;"></div>
+                @Html.HiddenFor(model => model.Account_Id)
+                if (!Html.ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-error">
+					        @Html.ValidationSummary()           
+                    </div>
+                }
+                <div class="control-group">
+				    <label class="control-label" for="First_Name" style="text-align:left;">
+					    <span class="required">*</span>
+					    ชื่อ:
+				    </label>
+				    <div class="controls">
+					    @Html.Editor("First_Name")                   
+				    </div>
+                    @Html.ValidationMessageFor(model => model.First_Name)
+			    </div>
+                <div class="control-group">
+				    <label class="control-label" for="Last_Name" style="text-align:left;">
+					    <span class="required">*</span>
+					    นามสกุล:
+				    </label>
+				    <div class="controls">
+					    @Html.Editor("Last_Name")                 
+				    </div>
+                    @Html.ValidationMessageFor(model => model.Last_Name)
+			    </div>
+		
+			    <div class="control-group">
+				    <label class="control-label" for="Birthday" style="text-align:left;">
+					    <span class="required">*</span>
+					    วันเดือนปีเกิด:
+				    </label>
+				    <div class="controls">
+					    @Html.Raw("วัน:") @Html.DropDownList("Day_Of_Birth", null, new { style = "width:60px;" })
+					    @Html.Raw("เดือน:") @Html.DropDownList("Month_Of_Birth", null, new { style = "width:120px;" })
+					    @Html.Raw("ปี:") @Html.DropDownList("Year_Of_Birth", null, new { style = "width:80px;" })
+				    </div>
+                    @Html.ValidationMessageFor(model => model.Day_Of_Birth)
+			    </div>
+                <div class="control-group">
+				    <label class="control-label" for="Gender" style="text-align:left;">
+					    <span class="required">*</span>
+					    เพศ:
+				    </label>
+				    <div class="controls">
+                        <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Gender_Cd", "M", new { style = "margin:0 5px;", @id = "Gender_Cd_M" })<label style="display:inline;" for="Gender_Cd_M">ชาย</label></div>
+					    <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Gender_Cd", "F", new { style = "margin:0 5px;", @id = "Gender_Cd_F" })<label style="display:inline;" for="Gender_Cd_F">หญิง</label></div>					
+				    </div>
+                    <div class="clear"></div>
+                    @Html.ValidationMessageFor(model => model.Gender_Cd)
+			    </div>
+			    <div class="control-group">
+				    <label class="control-label" for="Income_Range_Cd" style="text-align:left;">
+					    <span style="margin-right:10px;">&nbsp;</span>
+					    รายได้ครัวเรือนต่อเดือน:
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Income_Range_Cd")
+				    </div>
+			    </div>
+                <div class="control-group">
+				    <label class="control-label" for="Income_Range_Cd" style="text-align:left;">
+					    <span style="margin-right:10px;">&nbsp;</span>
+					    รายได้ส่วนตัวต่อเดือน:
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Personal_Income_Range_Cd")
+				    </div>
+			    </div>
+			    <div class="control-group">
+				    <label class="control-label" for="Occupation_Cd" style="text-align:left;">
+					    <span style="margin-right:10px;">&nbsp;</span>
+					    อาชีพ:
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Occupation_Cd")
+				    </div>
+			    </div>
+			    <div class="control-group">
+				    <label class="control-label" for="Education_Cd" style="text-align:left;">
+					    <span style="margin-right:10px;">&nbsp;</span>
+					    การศึกษา:
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Education_Cd")
+				    </div>
+			    </div>
+                <div class="control-group">
+				    <label class="control-label" for="Marital_Status_Cd" style="text-align:left;">
+					    <span style="margin-right:10px;">&nbsp;</span>
+					    สถานะ:
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Marital_Status_Cd")
+				    </div>
+			    </div>
+                <div class="control-group">
+				    <label class="control-label" for="Children" style="text-align:left;">
+					    <span style="margin-right:10px;">&nbsp;</span>
+					    มีบุตร:
+				    </label>
+				    <div class="controls">
+                    
+                        @if (@Model.Children_Flag == null)
+                        {
+                            <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Children_Flag", "N", new { style = "margin:0 5px;", @id = "Children_Flag_False" })<label style="display:inline;" for="Children_Flag_False">ไม่มี</label></div>
+					            <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Children_Flag", "Y", new { style = "margin:0 5px;", @id = "Children_Flag_True" })<label style="display:inline;" for="Children_Flag_True">มี</label></div>
+                        }
+                        else
+                        {
+                            if (@Model.Children_Flag.Equals("N"))
+                            {
+                                <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Children_Flag", "N", new { style = "margin:0 5px;", @id = "Children_Flag_False", Checked = "checked" })<label style="display:inline;" for="Children_Flag_False">ไม่มี</label></div>
+					            <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Children_Flag", "Y", new { style = "margin:0 5px;", @id = "Children_Flag_True" })<label style="display:inline;" for="Children_Flag_True">มี</label></div>
+                            }
+                            else
+                            { 
+                                <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Children_Flag", "N", new { style = "margin:0 5px;", @id = "Children_Flag_False" })<label style="display:inline;" for="Children_Flag_False">ไม่มี</label></div>
+					            <div style="height:20px;float:left;width:150px;">@Html.RadioButton("Children_Flag", "Y", new { style = "margin:0 5px;", @id = "Children_Flag_True", Checked = "checked" })<label style="display:inline;" for="Children_Flag_True">มี</label></div>
+                            }
+                        }						
+				    </div>
+			    </div>
+                <div class="control-group select-child-year">
+				    <label class="control-label" for="Marital_Status_Cd" style="text-align:left;">
+					    <span style="margin-right:10px;">&nbsp;</span>
+                        <span class="required">*</span>
+					    อายุบุตรคนที่ 1 (ปี):
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Year_Of_Birth_Child1")
+				    </div>
+                    @Html.ValidationMessageFor(model => model.Year_Of_Birth_Child1)
+			    </div>
+                <div class="control-group select-child-year">
+				    <label class="control-label" for="Marital_Status_Cd" style="text-align:left;">
+					    <span style="margin-right:30px;">&nbsp;</span>
+					    อายุบุตรคนที่ 2 (ปี):
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Year_Of_Birth_Child2")
+				    </div>
+			    </div>
+                <div class="control-group select-child-year">
+				    <label class="control-label" for="Marital_Status_Cd" style="text-align:left;">
+					    <span style="margin-right:30px;">&nbsp;</span>
+					    อายุบุตรคนที่ 3 (ปี):
+				    </label>
+				    <div class="controls">
+					    @Html.DropDownList("Year_Of_Birth_Child3")
+				    </div>
+			    </div>
+                <div class="control-group">
+				    <label class="control-label" for="Marital_Status_Cd" style="text-align:left;width:100px;">
+					    <span style="line-height: 30px !important;vertical-align:middle;">ที่อยู่ปัจจุบัน:</span>
+				    </label>
+				    <div class="controls address">
+                            <span style="line-height: 30px !important;vertical-align:middle;margin-right:10px;">รหัสไปรษณีย์</span>
+                            @Html.Editor("ZipCode")
+                            <span style="line-height: 30px!important;vertical-align:middle;margin-left:10px;margin-right:10px;">เขต/แขวง</span>
+					        @Html.DropDownList("AreaCode")
+				    </div>
+                    <div class="zipcode-validation">   
+                         @Html.ValidationMessageFor(model => model.ZipCode)
+                    </div>
+			    </div>
+			    <div class="control-group">
+				    <label class="control-label" for="Identification_Number" style="text-align:left;">
+					    หมายเลขบัตรประชาชน:
+				    </label>
+				    <div class="controls">
+                        @if (full_access)
+                        {
+					        @Html.Editor("Identification_Number")
+                        }
+                        else
+                        {
+                            <span style="position:relative;top:5px;">
+                                @if (string.IsNullOrWhiteSpace(Model.Identification_Number))
+                                {
+                                    @Html.Raw("-")
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(item => item.Identification_Number)
+                                    @Html.Hidden("Identification_Number")
+                                }
+                            </span>
+
+                        }
+				    </div>
+                     @Html.ValidationMessageFor(model => model.Identification_Number)
+			    </div>
+                <div style="margin:0 0 40px -20px;">
+				    <div class="title" style="margin-bottom: 20px;">
+					    <span>สิ่งที่สนใจ (เลือกได้มากกว่า 1 ข้อ)</span>
+				    </div>	
+                     @{int item_no = 1;}	
+                     <div style="width:280px; float:left; margin-bottom: 20px;">
+				         @foreach (var item in ViewBag.Interests)
+             {
+
+                 if (item_no <= (ViewBag.Interests.Count / 2))
+                 { 
+                                        <div style="margin-bottom:10px;">
+						                     @if (ViewBag.InterestSelected.Contains(@item.Interest_Cd))
+                           {
+                                                                            <div style="width:310px; float:left; margin-bottom: 20px;">
+						                                                                <input type="checkbox" name="selectedInterests" checked = "checked" value="@item.Interest_Cd" style="margin: 0 10px;" />
+						                                                                @Html.Raw(@item.Interest_Name_Th)
+					                                                         </div>
+                           }
+                           else
+                           { 
+                                                                            <div style="width:310px; float:left; margin-bottom: 20px;">
+						                                                                <input type="checkbox" name="selectedInterests" value="@item.Interest_Cd" style="margin: 0 10px;" />
+						                                                                @Html.Raw(@item.Interest_Name_Th)
+					                                                        </div>
+                    
+                           }
+                                        </div>
+                 }
+                 else
+                 {
+                     break;
+                 }
+
+                 item_no += 1;
+             }
+                    </div>
+                    @{ item_no = 1;}	
+                    <div style="width:280px; float:right; margin-bottom: 20px;">
+                        @foreach (var item in ViewBag.Interests)
+                        {
+
+                            if (item_no > (ViewBag.Interests.Count / 2))
+                            { 
+                                    <div style="margin-bottom:10px;">
+                                         @if (ViewBag.InterestSelected.Contains(@item.Interest_Cd))
+                                         {
+                                                        <div style="width:310px; float:left; margin-bottom: 20px;">
+						                                            <input type="checkbox" name="selectedInterests" checked = "checked" value="@item.Interest_Cd" style="margin: 0 10px;" />
+						                                            @Html.Raw(@item.Interest_Name_Th)
+					                                     </div>
+                                         }
+                                         else
+                                         { 
+                                                        <div style="width:310px; float:left; margin-bottom: 20px;">
+						                                            <input type="checkbox" name="selectedInterests" value="@item.Interest_Cd" style="margin: 0 10px;" />
+						                                            @Html.Raw(@item.Interest_Name_Th)
+					                                    </div>
+                    
+                                         }
+                                    </div>                   
+                            }
+                            item_no += 1;
+                        }
+                     </div>	
+                     <div class="clear"></div>
+				     <div style="text-align:center;" >
+					        <input type="checkbox" name="Agree" value="true" style="margin: 0 10px;" /> 
+						    <span>
+							    ฉันยอมรับ<a href="#" id="eula">ข้อกำหนดในการให้บริการและนโยบายส่วนบุคคล</a>ของ Freebie 
+						    </span>
+                            <div style="color:Red;">
+                                @ViewBag.NotAgree
+                            </div>
+                       
+				     </div>
+               </div>
+                <div style="text-align:center;">
+				    <input type="submit" id="register-profile-submit" value="บันทึก" class="btn btn-primary btn-blue"/>
+                    @Html.ActionLink("ยกเลิก", "ViewAcctProfileByAgent", "SearchCustByAgent", new { Account_Id = Model.Account_Id },
+                    new
+                    {
+                        @class = "btn-blue btn-primary btn",
+                        style = ""
+                        //onclick = "return confirm('คุณต้องการที่จะยกเลิกการลงทะเบียนออนไลน์ใช่หรือไม่?');"
+                    })
+			    </div>
+            }
+        </div>
+    </div>
+</div>
+<ul id="quotas-table" style="display:none;">  
+    <li id="low" data-freq-val ='@quotas["low"].Quota_Freq_Val' data-dur-val = '@quotas["low"].Quota_Dur_Val'></li>
+    <li id="medium" data-freq-val ='@quotas["medium"].Quota_Freq_Val' data-dur-val = '@quotas["medium"].Quota_Dur_Val'></li>
+    <li id="high" data-freq-val ='@quotas["high"].Quota_Freq_Val' data-dur-val = '@quotas["high"].Quota_Dur_Val'></li>
+</ul>
+
+}
+else
+{ 
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

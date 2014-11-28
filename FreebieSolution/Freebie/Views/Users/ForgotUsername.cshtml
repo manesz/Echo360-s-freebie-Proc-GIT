@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "ForgotUsername";
+    Layout = "~/Views/Shared/_ForgetUsername.cshtml";
+}
+    <div class="title pink-text" style="margin-bottom:40px;">
+	    <span>ระบุข้อมูลเพื่อชื่อบัญชี</span>
+    </div>
+    <div class = "content-area">
+        <span>กรุณาระบุหมายเลขโทรศัพท์ 10 หลัก และรหัสผ่านบัญชีของสมาชิก เพื่อขอรับรหัสผ่านแบบใช้ครั้งเดียว</span>
+        <div class="clear" style="height:20px;"></div>
+        @using (Html.BeginForm("ForgotUsername", "Users", FormMethod.Post, new { @id = "webfront-forget-username-form", @class = "form-horizontal" }))
+        {
+           
+             <div class="control-group">
+		        <label class="control-label" for="First_Name" style="text-align:left;">
+				        หมายเลขโทรศัพท์:
+		        </label>
+		        <div class="controls">
+			        @Html.Editor("PhoneNumber")               
+		        </div>
+                @Html.ValidationMessage("PhoneNumber")
+	         </div>
+             <div class="control-group">
+		        <label class="control-label" for="First_Name" style="text-align:left;">
+				       รหัสผ่านบัญชีสมาชิก:
+		        </label>
+		        <div class="controls">
+			        @Html.Password("Password")               
+		        </div>
+                @Html.ValidationMessage("Password")
+	         </div>
+             <div style="text-align:center;">
+		        <input type="submit" id="register-profile-submit" value="รับรหัสผ่าน" class="btn btn-primary btn-blue"/>
+	         </div>
+        }
+         @if (ViewBag.ResetOTP != null)
+        { 
+            <div style="text-align:center;">
+                <span style="color:Red;">@ViewBag.ResetOTP</span>
+            </div>
+        }
+        @if (ViewBag.ValidNumber)
+        {
+            if (ViewBag.ErrorOTP != null)
+            { 
+                <div style="text-align:center;">
+                    <span style="color:Red;">@ViewBag.ErrorOTP</span>
+                </div>
+            }
+            else
+            { 
+                <span>
+			        กรุณาใส่รหัสผ่านที่ได้รับทาง SMS เพื่อยืนยันความเป็นเจ้าของหมายเลขโทรศัพท์มือถือ รหัสผ่านของคุณมีอายุใช้งาน  @System.Configuration.ConfigurationManager.AppSettings["OTPPwdExpired"] นาที
+		        </span>
+               @* <span style="font-weight:bold;"> OPT is @ViewBag.OTP</span>*@
+                    using (Html.BeginForm("GetUsername", "Users", FormMethod.Post, new { @id = "webfront-forget-username-otp-form", @class = "form-horizontal", style = "width:100%;" }))
+                    {
+					        <div style="clear:both;height:50px;"></div>           
+					        <div class="control-group" style = "margin-bottom: 0;">
+						        <label class="control-label" for="Password" style="text-align:left;">รหัสผ่าน:</label>
+						        <div class="controls">
+							        @Html.Password("OTPPassword")
+						        </div>
+					        </div>
+                        if (@ViewBag.Error != null)
+                        { 
+                                <span style="color:red; margin-left: 180px;">@ViewBag.ErrorMessage</span>                  
+                        }
+					        <div style="text-align:center;margin-top:40px;">
+						        <input type="submit" value="ตกลง" id ="webfront-forgot-username-otp-submit" class ="btn btn-primary btn-blue" />
+						        @Html.ActionLink("ยกเลิก", "Login", "Users", null, new { @class = "btn btn-primary btn-blue" })
+					        </div>
+                     }
+           }
+    }
+    </div>
+    @Html.Partial("~/Views/Shared/_Sidebanner.cshtml")
+    
+<script type="text/javascript">
+         $(document).ready(function () {
+             $('#webfront-otp-submit-link').on('click', function (e) {
+                 $('#webfront-forget-username-otp-form').submit();
+                 return false;
+             });
+         });
+</script>
+
+   

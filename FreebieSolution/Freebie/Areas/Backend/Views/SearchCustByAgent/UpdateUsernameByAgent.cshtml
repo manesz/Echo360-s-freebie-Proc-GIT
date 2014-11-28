@@ -1,0 +1,81 @@
+﻿@using Freebie.Libs;
+
+@model Freebie.Models.Account 
+@{
+    ViewBag.Title = "UpdateUsernameByAgent";
+    ViewBag.PageName = "ข้อมูลชื่อผู้ใช้";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+
+    bool has_permission = Permission.has_permission(Permission.update_cust_username_page_id);
+    bool allow_update = Permission.allow_update(Permission.update_cust_username_page_id);  
+}
+
+@if (has_permission && allow_update)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="width:24%;float:left;position:relative;">
+        @Html.Partial("~/Areas/Backend/Views/Shared/CustomerMenu.cshtml")
+    </div>
+    <div style="width:74%;float:left;">
+        <div class="backend-table-title">
+	        <span>ชื่อผู้ใช้บริการ Online:</span>
+        </div>
+        <div style="padding:40px;">
+            @using (Html.BeginForm("UpdateUsernameByAgent", "SearchCustByAgent", FormMethod.Post, new { @id = "webfront-acc-update-username-form", @class = "form-horizontal", style = "width:100%;" }))
+            {	
+                @Html.HiddenFor(item => item.Account_Id)
+                <div class="control-group">
+		            <label class="control-label" for="First_Name" style="text-align:left;">
+				            ชื่อผู้ใช้:
+		            </label>
+		            <div class="controls">
+					           @if (string.IsNullOrWhiteSpace(Model.User_Name))
+                            { @Html.Raw("-")}
+                            else
+                            { @Html.Raw(Model.User_Name)}        
+		            </div>
+	            </div>
+                <div class="control-group">
+		            <label class="control-label" for="First_Name" style="text-align:left;">
+				            ชื่อผู้ใช้ใหม่:
+		            </label>
+		            <div class="controls">
+					            @Html.Editor("New_User_Name")               
+		            </div>
+                    @Html.ValidationMessage("New_User_Name")
+	            </div>	
+                <div class="control-group">
+		            <label class="control-label" for="First_Name" style="text-align:left;">
+				            กรุณายืนยันชื่อผู้ใช้ใหม่:
+		            </label>
+		            <div class="controls">
+					            @Html.Editor("Confirm_User_Name")            
+		            </div>
+                    @Html.ValidationMessage("Confirm_User_Name")
+	            </div>	
+                <div style="text-align:center;">
+		            <input type="submit" id="register-profile-submit" value="บันทึก" class="btn btn-primary btn-blue"/>
+	            </div>
+            }
+        </div>
+    </div>
+</div>
+
+}
+else
+{ 
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).keydown(function (event) {
+            if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                event.preventDefault();
+            }
+        });
+
+        $(document).on("contextmenu", function () {
+                return false;
+        });
+    })
+</script>

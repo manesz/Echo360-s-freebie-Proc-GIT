@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "RenderResult";
+    ViewBag.PageName = "ลงทะเบียนสมาชิก";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+}
+
+         @if (ViewBag.Type == 1) {
+                @Html.Partial("~/Views/Statics/RegisterResultSuccess.cshtml")
+        }
+        else {
+            if (ViewBag.Type == 2)
+            { 
+                    @Html.Partial("~/Views/Statics/RegisterResultPending.cshtml")
+            }
+            else {
+                if (ViewBag.Type == 3)
+                { 
+                    @Html.Partial("~/Views/Statics/SendPasswordToEmail.cshtml")
+                }
+                else {
+                    if (ViewBag.Type == 4)
+                    { 
+                        @Html.Partial("~/Views/Statics/ChangePasswordResult.cshtml")
+                    }
+                    else { 
+                        if (ViewBag.Type == 5)
+                    { 
+                        @Html.Partial("~/Views/Statics/GetUsernameResult.cshtml")
+                    }
+                    
+                    }            
+                }
+            }
+        }

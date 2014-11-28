@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "GetSchedulers";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+}
+
+<h2>GetSchedulers</h2>
+
+@foreach (var item in ViewBag.Jobs)
+{ 
+    @Html.Raw(item);
+}

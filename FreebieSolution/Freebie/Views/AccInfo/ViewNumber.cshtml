@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Freebie.Models.AccountMobile>
+@{
+    ViewBag.Title = "ViewNumber";
+    Layout = "~/Views/Shared/_AccInfo.cshtml";
+}
+<div class="title pink-text" style="margin-bottom:0;">
+	<span>เบอร์โทรศัพท์มือถือของสมาชิก:</span>
+</div>
+<div class = "content-area" style="padding:20px 0 0 0;">
+    <table class="border-table" style="width:450px;text-align:center;">
+        <thead>
+            <tr style="background:#00EEDD;">
+                <th style="width:80px;">เบอร์หลัก</th>
+                <th style="width:140px;">ลำดับที่</th>
+                <th style="width:150px;">เบอร์โทรศัพท์</th>
+                <th style="width:65px;">สถานะ</th>
+                <th style="width:65px;">&nbsp;</th>
+            </tr>
+        </thead>
+        @{var count = 1;}
+        <tbody>
+            @foreach (var item in Model) 
+            {
+                <tr>
+                    <td>@Html.RadioButton("PrimaryNumber", item.Primary_Flag, new { @class ="select-primary-number", style = "margin:0 5px 2px 5px;", data_id = item.Mobile_Number })</td>
+                    <td>เบอร์โทรศัพท์ที่ @count:</td>
+                    <td>@item.Mobile_Number</td>
+                    <td>@item.Status()</td>
+                    <td>
+                       @if (!item.Primary_Flag)
+                       { @Html.ActionLink("ลบ", "RemoveNumber", "AccInfo",  new { phone_number = item.Mobile_Number },
+                                            new { onclick = "return confirm('ยืนยันการลบเบอร์โทรศัพท์ใช่หรือไม่?');" }) }
+                    </td>
+                </tr>
+                count++;
+            }
+            @if (Model.Count() < 3)
+            {
+                 <tr>
+                    <td></td>
+                    <td>เบอร์โทรศัพท์ที่ @count:</td>
+                    <td></td>
+                    <td></td>
+                    <td>                    
+                       @Html.ActionLink("เพิ่ม", "AddNumber", "AccInfo")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div style="margin-top:40px;text-align:center;">
+        <input type="button" value="บันทึก" name="save" class="btn btn-primary btn-blue" id ="save-button"/>
+    </div>
+    <div style="margin-top:60px;">
+        @Html.Partial("~/Views/Statics/ViewNumberRemark.cshtml")
+    </div>
+</div>
+ @Html.Partial("~/Views/Shared/_Sidebanner.cshtml")
+<script type="text/javascript">
+    $(document).ready(function () {
+        var selected_mobile = "";
+        $('#save-button').hide();
+
+        $('.select-primary-number').each(function (item) {
+            var rdo = $(this);
+            if (rdo.val() == "True") {
+                rdo.attr('Checked', 'Checked');
+                selected_mobile = $(this).attr('data-id');
+            }
+        })
+
+        $('.select-primary-number').on('change', function (e) {
+            var mobile_no = $(this).attr('data-id');
+
+            if (mobile_no != selected_mobile) {
+                $('#save-button').show();
+            }
+            else {
+                $('#save-button').hide();
+            }
+        })
+
+        $('#save-button').on('click', function (e) {
+            if (confirm('ยืนยันการบันทึกข้อมูล?')) {
+                var phone_number = $('.select-primary-number').filter(':checked').attr('data-id');
+
+                $.ajax({
+                    type: "POST",
+                    url: 'ChangePrimary',
+                    data: { phone_number: phone_number },
+                    async: false
+                }).done(function () { location.reload(); }).fail(function (data) { console.log(data); location.reload(); });
+            }
+        });
+    });
+</script>
+

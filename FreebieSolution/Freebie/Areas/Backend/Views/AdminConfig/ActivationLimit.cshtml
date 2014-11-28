@@ -1,0 +1,55 @@
+﻿@model Freebie.ViewModels.ActivationLimit
+@{
+    ViewBag.Title = "ActivationLimit";
+    ViewBag.PageName = "ตั้งค่าการเปิดใช้บริการ";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    bool has_permission = role_cd.Equals("AM");  
+}
+
+<div class="backend-table-title">
+	<span>ตั้งค่าการเปิดใช้บริการ</span>     
+     @if (has_permission)
+     {
+        @Html.ActionLink("แก้ไข", "UpdateActivationLimit", "AdminConfig", null, new { style = "float:right;" })  
+     }  
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="border: 1px solid black;padding: 0 20px 20px 20px;width:500px;">
+        <div><span style="font-weight:bold;">ข้อมูล ณ วันที่ @(String.Format("{0:dd/MM/yyyy}", DateTime.Now))</span></div>
+        <div style="padding-left:20px;margin-top:20px;">
+            <div style="float:left;width:350px;">จำนวนลูกค้าที่ลงทะเบียนสำเร็จ (คน):</div>
+            <div style="float:left;text-align:right;width:100px;">@Html.DisplayFor(model => model.no_activation)</div>
+        </div>
+        <div style="padding-left:20px;">
+            <div style="float:left;width:350px;">จำนวนลูกค้าที่รอ Activate (คน):</div>
+            <div style="float:left;text-align:right;width:100px;">@Html.DisplayFor(model => model.no_activation_pending)</div>
+        </div>
+        <div style="padding-left:20px;">
+            <div style="float:left;width:350px;">จำนวนลูกค้าที่ลงทะเบียนสำเร็จสะสม (คน):</div>
+            <div style="float:left;text-align:right;width:100px;">@Html.DisplayFor(model => model.no_activation_acc)</div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<div style="margin: 20px 20px 0 20px;">
+    <div style="border: 1px solid black;padding: 0 20px 20px 20px;width:500px;">
+        <div style="padding-left:20px;margin-top:20px;">
+            <div style="float:left;width:350px;">Limit จำนวนบัญชีที่ Activate ทั้งหมด:</div>
+            <div style="float:left;text-align:right;width:100px;">@Html.DisplayFor(model => model.no_activation_limit_total)</div>
+        </div>
+        <div style="padding-left:20px;">
+            <div style="float:left;width:350px;">Limit จำนวนบัญชีที่ Active ต่อวัน:</div>
+            <div style="float:left;text-align:right;width:100px;">@Html.DisplayFor(model => model.no_activation_limit_daily)</div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

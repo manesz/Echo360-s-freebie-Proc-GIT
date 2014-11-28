@@ -1,0 +1,18 @@
+﻿@{
+    
+    string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    string action = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    string banner_name = controller + "_" + action;
+    
+}
+<style>
+    #header 
+    {
+	    background-repeat: no-repeat;
+	    background-position: 54% 50%;   
+     }
+     
+    @* #header { background-image: url(@Url.Content("~/Images/Banners/Top/" + "Users_RegisterByCust" + ".png")); }*@
+</style>
+
+

@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "RejectExistingAcct";
+    Layout = "~/Views/Shared/_Register.cshtml";
+}
+@if (ViewBag.Type == 1)
+{ 
+    @Html.Partial("../Statics/RejectNonAIS")
+}
+else {
+    if (ViewBag.Type == 2)
+    { 
+        @Html.Partial("../Statics/RejectExistingAcct")
+    }
+    else
+    {
+        if (ViewBag.Type == 3)
+        { 
+            @Html.Partial("../Statics/RejectRegistrationDisabled")
+        }
+    }
+}

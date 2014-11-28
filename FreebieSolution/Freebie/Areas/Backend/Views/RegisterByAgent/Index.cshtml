@@ -1,0 +1,87 @@
+﻿@using Freebie.Libs;
+@{
+    ViewBag.Title = "RegisterByAgent";
+    ViewBag.PageName = "ลงทะเบียนลูกค้า";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+
+
+    bool has_permission = Permission.has_permission(Permission.register_page_id);
+}
+ @if (has_permission)
+{
+<div>
+     @Html.Partial("RegisterStep") 
+     <div class="tab-content" id="register-tab-content" style="padding:0 0 20px 20px;">
+        <div class="title-accInfo">
+	        <span class="pink-text">ระบุข้อมูลเพื่อลงทะเบียนสมาชิก</span>
+        </div>
+        <div style="margin: 20px 20px 0 20px;">
+	        
+             @using (Html.BeginForm("VerifySubrNumber", "RegisterByAgent", FormMethod.Post, new { @id = "webfront-register-form-validate-number", @class = "form-horizontal" }))
+             {
+			        <br />
+			        <div class="control-group">
+				        <label class="control-label" for="PhoneNumber" style="text-align:left;">หมายเลขโทรศัพท์:</label>
+				        <div class="controls">
+					        @Html.Editor("PhoneNumber", new { @class = "u7" })
+				        </div>
+                         @Html.ValidationMessage("PhoneNumber")
+			        </div>
+			
+			
+			        <div style="clear:both;height:20px;"></div>
+			        <div style="text-align:center;">
+				        <input type="submit" value="ตกลง" class="btn btn-primary btn-blue"/>
+			        </div>
+             }
+              @if (ViewBag.ResetOTP != null)
+              { 
+                    <div style="text-align:center;">
+                        <span style="color:Red;">@ViewBag.ResetOTP</span>
+                    </div>
+              }
+              @if (@ViewBag.ValidNumber)
+              {
+                  if (ViewBag.ErrorOTP != null)
+                  { 
+                        <div style="text-align:center;">
+                            <span style="color:Red;">@ViewBag.ErrorOTP</span>
+                        </div>
+                  }
+                  else
+                  { 
+		                <span>
+			                กรุณาใส่รหัสผ่านที่ได้รับทาง SMS เพื่อยืนยันความเป็นเจ้าของหมายเลขโทรศัพท์มือถือ รหัสผ่านของคุณมีอายุใช้งาน 15 นาที 
+		                </span>
+                        <span style="font-weight:bold;"> OPT is @ViewBag.OTP</span>
+                      using (Html.BeginForm("Register", "RegisterByAgent", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-horizontal", style = "width:100%;" }))
+                      {
+					                <div style="clear:both;height:50px;"></div>
+					                <div class="control-group" style = "margin-bottom: 0;">
+						                <label class="control-label" for="Password" style="text-align:left;">รหัสผ่าน:</label>
+						                <div class="controls">
+							                @Html.Password("Password")
+						                </div>
+					                </div>
+                          if (@ViewBag.Error != null)
+                          { 
+                                        <span style="color:red; margin-left: 180px;">@ViewBag.ErrorMessage</span>                  
+                          }
+					                <div style="text-align:center;margin-top:40px;">
+						                @*@Html.ActionLink("ตกลง", "RegisterUsername", "Users", null, new { @class = "btn btn-primary btn-blue", @id = "webfront-register-submit-link" })*@
+						                <input type="submit" value="ตกลง" id ="webfront-register-submit" class ="btn btn-primary btn-blue" />
+                                        @Html.ActionLink("ยกเลิก", "Login", "Users", null, new { @class = "btn btn-primary btn-blue" })
+					                </div>
+                      }
+                  }
+              }
+        </div>
+       
+     </div>
+</div>
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}
+

@@ -1,0 +1,71 @@
+﻿@model Freebie.ViewModels.TrialQuota
+@{
+    ViewBag.Title = "UpdateFreeTrialQuota";
+    ViewBag.PageName = "ตั้งค่าโควต้าทดลองใช้งานฟรี";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    string role_cd = (Session["Role"] == null) ? "" : Session["Role"].ToString();
+    bool has_permission = role_cd.Equals("AM");  
+}
+
+<div class="backend-table-title">
+	<span>ตั้งค่าโควต้าทดลองใช้งานฟรี</span> 
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="border: 1px solid black;padding: 0 20px 20px 20px;width:500px;">
+        <div><span style="font-weight:bold;">ข้อมูล ณ วันที่ @(String.Format("{0:dd/MM/yyyy}", DateTime.Now))</span></div>
+        <div style="padding-left:20px;margin-top:20px;">
+            <div style="float:left;width:350px;">จำนวนเบอร์โทรศัพท์ที่ทดลองใช้งานไปแล้ว (เบอร์):</div>
+            <div style="float:left;text-align:right;width:100px;">@Html.DisplayFor(model => model.no_trial_used)</div>
+        </div>
+        <div style="padding-left:20px;">
+            <div style="float:left;width:350px;">จำนวนเบอร์โทรศัพท์ที่ทดลองใช้งานไปแล้วสะสม (เบอร์):</div>
+            <div style="float:left;text-align:right;width:100px;">@Html.DisplayFor(model => model.no_trial_acc)</div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+    using (Html.BeginForm("UpdateFreeTrialQuota", "AdminConfig", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-horizontal", style = "width:100%;" }))
+    {
+        <div style="margin: 20px 20px 0 20px;">
+            <div style="border: 1px solid black;padding: 0 20px 20px 20px;width:500px;">
+                <div style="padding-left:20px;margin-top:20px;">
+                    <div style="float:left;width:350px;">Limit จำนวนเบอร์โทรศัพท์ที่อนุญาตให้ทดลองใช้งาน(เบอร์):</div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        <input type="text" name ="trial_limit_total" value="@Model.trial_limit_total" style="width:80px;text-align:right;"/>
+                    </div>
+                </div>
+                <div style="padding-left:20px;">
+                    <div style="float:left;width:150px;">ระยะเวลาต่อครั้ง (นาที)</div>
+                    <div style="float:left;text-align:right;width:100px;">
+                       <input type="text" name ="trial_dur_val" value="@Model.trial_dur_val" style="width:40px;text-align:right;"/>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div style="padding-left:20px;">
+                    <div style="float:left;width:150px;">Activate การใช้งาน</div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        @Html.RadioButton("Trial_Enable_Flag", true, new { style = "margin:0 5px;", @id = "Trial_Enable_Flag_True" })<label style="display:inline;" for="Trial_Enable_Flag_True">Enable</label>
+                    </div>
+                    <div style="float:left;text-align:right;width:100px;">
+                        @Html.RadioButton("Trial_Enable_Flag", false, new { style = "margin:0 5px;", @id = "Trial_Enable_Flag_False" })<label style="display:inline;" for="Trial_Enable_Flag_False">Disable</label>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div style="text-align:center;margin-top:40px;">
+				        <input type="submit" id="free-trial-quota-submit" value="บันทึก" class="btn btn-primary btn-blue"/>
+                        @Html.ActionLink("ยกเลิก", "FreeTrialQuota", "AdminConfig", null,
+                            new
+                            {
+                                @class = "btn btn-primary btn-blue",
+                            })
+		        </div>
+            </div>
+        </div>
+    }
+}
+else
+{ 
+    @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

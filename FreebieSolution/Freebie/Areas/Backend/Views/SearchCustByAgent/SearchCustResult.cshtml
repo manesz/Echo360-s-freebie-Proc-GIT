@@ -1,0 +1,138 @@
+﻿@using Freebie.Libs;
+@model IEnumerable<Freebie.ViewModels.Customer>
+@using PagedList.Mvc; 
+@using PagedList;
+@{
+    ViewBag.Title = "SearchCustResult";
+    ViewBag.PageName = "ข้อมูลลูกค้า";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+
+    System.Collections.Hashtable statuses = new System.Collections.Hashtable();
+
+    var db = new Freebie.Models.EchoContext();
+    IEnumerable<Freebie.Models.Status> status_objs = db.Statuses.Where(x => x.Status_Type.Equals("Account"));
+    
+    foreach(var status in status_objs)
+    {
+        
+            statuses.Add(status.Status_Cd, status.Status_Name_Th);
+        
+    }
+    bool can_view_profile = false;
+    string role_cd = Session["Role"].ToString();
+    string dept_cd = Session["Dept"].ToString();
+    
+    if (!dept_cd.Equals("UC") || !dept_cd.Equals("PS"))
+    {
+        can_view_profile = true;
+    }
+    
+    bool has_permission = Permission.has_permission(Permission.search_cust_page_id);
+    bool has_permission_cust_profile = Permission.has_permission(Permission.cust_profile_page_id);
+}
+<link href="@Url.Content("~/Content/PagedList.css")" rel="stylesheet" type="text/css" />
+<div class="backend-table-title">
+	<span>ค้นหาบัญชี</span>   
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+   @using (Html.BeginForm("SearchCustResult", "SearchCustByAgent", FormMethod.Post, new { @id = "backend-search-cust-form", @class = "form-horizontal", style = "width:450px;" }))
+   {
+       <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					เบอร์โทรศัพท์:
+				</label>
+				<div class="controls">
+					@Html.Editor("PhoneNumber")                   
+				</div>
+		</div>
+       <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					หมายเลขบัตรประชาชน:
+				</label>
+				<div class="controls">
+					@Html.Editor("Identification_Number")                   
+				</div>
+		</div>
+       <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					อีเมล์:
+				</label>
+				<div class="controls">
+					@Html.Editor("Email")                   
+				</div>
+		</div>
+       <div style="text-align:center;">
+            <input type="submit" class="btn btn-primary btn-blue" value="ค้นหา"/>
+       </div>
+   }
+   @if (can_view_profile)
+   {
+   <table class="border-table" style="width:750px;text-align:center;">
+        <thead>
+            <tr style="background:#00EEDD;">
+                    <th style="width:50px;">ลำดับที่</th>
+                    <th style="width:150px;">ชื่อ-นามสกุล</th>
+                    <th style="width:100px;">เบอร์โทรศัพท์</th>
+                    <th style="width:120px;">หมายเลขบัตร</th>
+                    <th style="width:150px;">อีเมล์</th>
+                    <th style="width:80px;">สถานะ</th>
+                    <th style="width:100px;">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+                @{int count = 0;}
+                @foreach (var a in Model)
+                {
+                    string idcard_no = string.IsNullOrWhiteSpace(a.Identification_Number) ? "-" : a.Identification_Number;
+                    string email_name = string.IsNullOrWhiteSpace(a.Email) ? "-" : a.Email;
+                    <tr>
+                        <td>@(count + 1)</td>
+                        <td>
+                            @if (string.IsNullOrWhiteSpace(a.First_Name) && string.IsNullOrWhiteSpace(a.Last_Name))
+                            { 
+                                @Html.Raw("-")
+                            }
+                            else
+                            { 
+                                @a.First_Name @Html.Raw(" ") @a.Last_Name
+                            }
+                        </td>
+                        <td>@a.Phone_Number</td>
+                        <td>
+                            @idcard_no
+                        </td>
+                        <td>
+                            @email_name
+                        </td>
+                        <td>
+                            @statuses[a.Status_Cd]
+                        </td>
+                        <td>
+                            @if (!a.Status_Cd.Equals("PTUU"))
+                            { 
+                                @Html.ActionLink("รายละเอียด", "AcctInfoByAgent", "SearchCustByAgent", new { Account_Id = a.Account_Id }, null)
+                            }
+                                
+                         
+                        </td>
+                    </tr>
+                            count += 1;
+                }
+        </tbody>
+   </table>
+  
+   @Html.PagedListPager((IPagedList)ViewBag.PageStaffs, page => Url.Action("SearchCustResult", new { page = page, phone_number = ViewBag.PhoneNumber, email = ViewBag.Email, idcard = ViewBag.Identification_Number }))
+   }
+   else
+   { 
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+   }
+</div>
+}
+else
+{ 
+   @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}
+

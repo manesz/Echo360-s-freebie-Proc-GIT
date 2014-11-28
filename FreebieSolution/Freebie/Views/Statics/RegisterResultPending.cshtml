@@ -1,0 +1,34 @@
+﻿@{
+    string side_banner_path = "~/Images/Banners/Side/";    
+}
+<style>
+      
+     .Statics_RegisterResultPending
+        {
+            background-image: url(@Url.Content(side_banner_path + "Statics_RegisterResultPending_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: 0;  
+    
+        }
+     #top-banner-div { background-image: url(@Url.Content("~/Images/Banners/Top/" + "Statics_RegisterResultPending" + ".png")); }
+</style>
+<div style="margin: 0 0 0 150px;">
+    <div class="title pink-text" style="margin-bottom:20px;">
+		    <span>ขอบคุณที่ลงทะเบียนใช้บริการ Freebie</span>
+    </div>
+    <div class = "content-area" style = "width: 500px;">
+        <ul style="line-height: 30px;">
+           <li>
+                บริษัทจะส่ง SMS แจ้ง ณ วันที่คุณเริ่มใช้บริการได้
+           </li>
+           <li>คุณสามารถตรวจสอบสถานะการลงทะเบียน หรือ เปลี่ยนแปลงข้อมูลสมาชิกได้ตลอด 24 ช.ม.ผ่านเวปไซด์ www.freebie.co.th  
+           </li> 
+        </ul>
+    </div>
+    <div class = "side-banner Statics_RegisterResultPending">
+
+    </div>
+</div>
+
+

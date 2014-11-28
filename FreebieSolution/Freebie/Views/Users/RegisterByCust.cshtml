@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "RegisterByCust";
+    Layout = "~/Views/Shared/_Register.cshtml";
+    var quotas = ViewBag.Quotas;
+}
+
+<div class="title pink-text">
+	<span>ระบุข้อมูลเพื่อลงทะเบียนสมาชิก</span>
+</div>
+<div class = "content-area">
+	<span>กรุณาระบุหมายเลขโทรศัพท์ 10 หลัก เพื่อรับรหัสผ่านแบบใช้ครั้งเดียว</span>
+		 @using (Html.BeginForm("VerifySubrNumber", "Users", FormMethod.Post, new { @id = "webfront-register-form-validate-number", @class = "form-horizontal" }))
+	  {
+			<br />
+			<div class="control-group">
+				<label class="control-label" for="PhoneNumber" style="text-align:left;">หมายเลขโทรศัพท์มือถือ:</label>
+				<div class="controls">
+					@Html.Editor("PhoneNumber", new { @class = "u7" })
+				</div>
+                 @Html.ValidationMessage("PhoneNumber")
+			</div>
+			
+			
+			<div style="clear:both;height:20px;"></div>
+			<div style="text-align:center;">
+				<input type="submit" value="รับรหัสผ่าน" class="btn btn-primary btn-blue"/>
+			</div>
+	  }
+      @if (ViewBag.ResetOTP != null)
+      { 
+            <div style="text-align:center;">
+                <span style="color:Red;">@ViewBag.ResetOTP</span>
+            </div>
+      }
+	  @if (@ViewBag.ValidNumber)
+   {
+       if (ViewBag.ErrorOTP != null)
+       { 
+                <div style="text-align:center;">
+                    <span style="color:Red;">@ViewBag.ErrorOTP</span>
+                </div>
+       }
+
+       if (ViewBag.ShowPwd != null)
+       {
+		        <span>
+			        กรุณาใส่รหัสผ่านที่ได้รับทาง SMS เพื่อยืนยันความเป็นเจ้าของหมายเลขโทรศัพท์มือถือ รหัสผ่านของคุณมีอายุใช้งาน @System.Configuration.ConfigurationManager.AppSettings["OTPPwdExpired"] นาที 
+		        </span>
+            @*<span style="font-weight:bold;"> OPT is @ViewBag.OTP</span>*@
+           using (Html.BeginForm("RegisterByCust", "Users", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-horizontal", style = "width:100%;" }))
+           {
+					        <div style="clear:both;height:50px;"></div>
+					        <div class="control-group" style = "margin-bottom: 0;">
+						        <label class="control-label" for="Password" style="text-align:left;">รหัสผ่าน:</label>
+						        <div class="controls">
+							        @Html.Password("Password")
+						        </div>
+					        </div>
+               if (@ViewBag.Error != null)
+               { 
+                                <span style="color:red; margin-left: 180px;">@ViewBag.ErrorMessage</span>                  
+               }
+					        <div style="text-align:center;margin-top:40px;">
+						        @*@Html.ActionLink("ตกลง", "RegisterUsername", "Users", null, new { @class = "btn btn-primary btn-blue", @id = "webfront-register-submit-link" })*@
+						        <input type="submit" value="ตกลง" id ="webfront-register-submit" class ="btn btn-primary btn-blue" />
+                               
+					        </div>
+           }
+       }
+   }
+	 
+</div>
+@Html.Partial("~/Views/Shared/_Sidebanner.cshtml")
+<ul id="quotas-table" style="display:none;">  
+    <li id="low" data-freq-val ='@quotas["low"].Quota_Freq_Val' data-dur-val = '@quotas["low"].Quota_Dur_Val'></li>
+    <li id="medium" data-freq-val ='@quotas["medium"].Quota_Freq_Val' data-dur-val = '@quotas["medium"].Quota_Dur_Val'></li>
+    <li id="high" data-freq-val ='@quotas["high"].Quota_Freq_Val' data-dur-val = '@quotas["high"].Quota_Dur_Val'></li>
+</ul>
+ <script type="text/javascript">
+     $(document).ready(function () {
+//         $('#webfront-register-submit-link').on('click', function (e) {
+//             $('#webfront-register-form').submit();
+//             return false;
+//         });
+
+         $('#preview-quota-freq').text("0");
+         $('#preview-quota-dur').text("0");
+     });
+</script>
+

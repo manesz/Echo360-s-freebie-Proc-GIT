@@ -1,0 +1,190 @@
+﻿@{
+    ViewBag.Title = "RegisterUsername";
+    Layout = "~/Views/Shared/_Register.cshtml";
+    var quotas = ViewBag.Quotas;
+}
+<div class="title pink-text">
+	<span>ระบุข้อมูลเพื่อลงทะเบียนสมาชิก</span>
+</div>
+<div class = "content-area">
+	<span>
+		 กรุณาระบุอีเมล์และรหัสผ่านที่ต้องการใช้สร้างบัญชีผู้ใช้
+	</span>
+	<div  style="clear:both;height:40px;"></div>
+		@using (Html.BeginForm("RegisterUsername", "Users", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-horizontal", style = "width:100%;" }))
+	 {
+			<div class="control-group" id="control-group-email">
+				<label class="control-label" for="Email" style="text-align:left;">อีเมล์:</label>
+				<div class="controls">
+					@Html.Editor("Email")
+					<div style="width:40px;display:inline;" id="check-email">
+					    @ViewBag.EmailError
+					</div>
+				</div>
+                <span class="custom-error-message"></span>               
+			</div>
+			<div class="control-group" id="control-group-confirm-email">
+				<label class="control-label" for="ConfirmEmail" style="text-align:left;">ยืนยันอีเมล์:</label>
+				<div class="controls">
+					@Html.Editor("ConfirmEmail")
+					<div style="width:40px;display:inline;" id="check-confirm-email">
+					    @ViewBag.CfmEmailError
+					</div>
+				</div>
+                <span class="custom-error-message"></span>  
+			</div>
+			<div class="control-group" id="control-group-pwd">
+				<label class="control-label" for="Password" style="text-align:left;">รหัสผ่าน:</label>
+				<div class="controls">
+					@Html.Password("Password")
+					<div style="width:40px;display:inline;" id="check-pwd">
+					    @ViewBag.PasswordError
+					</div>
+				</div>
+                <span class="custom-error-message"></span>  
+			</div>
+			<div class="control-group" id="control-group-confirm-pwd">
+				<label class="control-label" for="ConfirmPassword" style="text-align:left;">ยืนยันรหัสผ่าน:</label>
+				<div class="controls">
+					@Html.Password("ConfirmPassword")
+					<div style="width:40px;display:inline;" id="check-confirm-pwd">
+					    @ViewBag.CfmPasswordError
+					</div>
+				</div>
+                <span class="custom-error-message"></span>  		
+			</div>
+	 
+			<div style="text-align:center;">
+				<input type="submit" value="ต่อไป" id ="register-username-submit" class="btn btn-primary btn-blue" style="margin-right:40px;"/>
+			</div>
+	 }
+</div>
+@Html.Partial("~/Views/Shared/_Sidebanner.cshtml")
+<ul id="quotas-table" style="display:none;">  
+    <li id="low" data-freq-val ='@quotas["low"].Quota_Freq_Val' data-dur-val = '@quotas["low"].Quota_Dur_Val'></li>
+    <li id="medium" data-freq-val ='@quotas["medium"].Quota_Freq_Val' data-dur-val = '@quotas["medium"].Quota_Dur_Val'></li>
+    <li id="high" data-freq-val ='@quotas["high"].Quota_Freq_Val' data-dur-val = '@quotas["high"].Quota_Dur_Val'></li>
+</ul>
+ <script type="text/javascript">
+     var pass = '<img src="@Url.Content("~/Images/pass.png")" />';
+     var fail = '<img src="@Url.Content("~/Images/fail.png")" />';
+
+     var clear_error = function (el_str) {
+         var group_str = '#control-group-' + el_str;
+         var mark = $('#check-' + el_str);
+         $(group_str).removeClass('error');
+         $(group_str + ' span').hide();
+         mark.html(pass);
+     };
+
+     var add_error = function (el_str, error_msg) {
+         var group_str = '#control-group-' + el_str;
+         var mark = $('#check-' + el_str);
+         $(group_str + ' span').show();
+         $(group_str + ' span').text(error_msg);
+         $(group_str).addClass('error');
+         mark.html(fail);
+     };
+
+     
+
+     $(document).ready(function () {
+         $('#preview-quota-freq').text("0");
+         $('#preview-quota-dur').text("0");
+
+         $(document).keydown(function (event) {
+             if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                 event.preventDefault();
+             }
+         });
+
+         $(document).on("contextmenu", function () {
+             return false;
+         });
+
+         $('#Email').on('blur', function (e) {
+             var email = $(this).val().toLowerCase();
+             $.ajax({
+                 type: 'GET',
+                 url: 'validateEmail',
+                 data: { email: email }
+             }).done(function (data) {
+                 if (data == 3) {
+                     clear_error('email');
+                 }
+                 else {
+                     if (data == 0) { add_error('email', '@System.Configuration.ConfigurationManager.AppSettings["Validate001"]'); }
+                     if (data == 1) { add_error('email', '@System.Configuration.ConfigurationManager.AppSettings["Validate002"]'); }
+                     if (data == 2) { add_error('email', '@System.Configuration.ConfigurationManager.AppSettings["Validate003"]'); }
+
+                 }
+                 var cfemail = $('#ConfirmEmail').val().toLowerCase();
+                 if (cfemail == "") {
+                     add_error('confirm-email', '@System.Configuration.ConfigurationManager.AppSettings["Validate001"]');
+                 } else {
+                     if (cfemail != email) {
+                         add_error('confirm-email', '@System.Configuration.ConfigurationManager.AppSettings["Validate004"]');
+                     } else {
+                         clear_error('confirm-email');
+                     }
+                 }
+             }
+			).fail(function ()
+			{ console.log("error"); }
+			);
+         })
+         $('#ConfirmEmail').on('blur', function (e) {
+             var cfemail = $(this).val().toLowerCase();
+             var email = $('#Email').val().toLowerCase();
+             if (cfemail == "") {
+                 add_error('confirm-email', '@System.Configuration.ConfigurationManager.AppSettings["Validate001"]');
+             } else {
+                 if (cfemail != email) {
+                     add_error('confirm-email', '@System.Configuration.ConfigurationManager.AppSettings["Validate004"]');
+                 } else {
+                     clear_error('confirm-email');
+                 }
+             }
+         })
+
+         $('#Password').on('blur', function (e) {
+             var password = $(this).val();
+             var cfpwd = $('#ConfirmPassword').val();
+             if (password == "") {
+                 add_error('pwd', '@System.Configuration.ConfigurationManager.AppSettings["Validate005"]');
+             } else {
+                 if (password.length < 6 || password.length > 15) {
+                     add_error('pwd', '@System.Configuration.ConfigurationManager.AppSettings["Validate008"]');
+                 } else {
+                     clear_error('pwd');
+                 }
+
+             }
+
+             if (cfpwd == "") {
+                 add_error('confirm-pwd', '@System.Configuration.ConfigurationManager.AppSettings["Validate005"]');
+             } else {
+                 if (cfpwd != password) {
+                     add_error('confirm-pwd', '@System.Configuration.ConfigurationManager.AppSettings["Validate006"]');
+                 } else {
+                     clear_error('confirm-pwd');
+                 }
+             }
+
+         })
+
+         $('#ConfirmPassword').on('blur', function (e) {
+             var cfpwd = $(this).val();
+             var pwd = $('#Password').val();
+             if (cfpwd == "") {
+                 add_error('confirm-pwd', '@System.Configuration.ConfigurationManager.AppSettings["Validate005"]');
+             } else {
+                 if (cfpwd != pwd) {
+                     add_error('confirm-pwd', '@System.Configuration.ConfigurationManager.AppSettings["Validate006"]');
+                 } else {
+                     clear_error('confirm-pwd');
+                 }
+             }
+         })
+     });
+ </script>

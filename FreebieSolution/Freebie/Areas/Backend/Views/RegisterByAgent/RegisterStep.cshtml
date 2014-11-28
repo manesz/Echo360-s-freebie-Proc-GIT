@@ -1,0 +1,67 @@
+﻿<div class="tabbable tabs-left" id="register-page-nav">
+			  <div class="register-step-header-container White Shadow">
+                  <div class="register-step-header-text">
+                        <div class="text-center">
+                            ขั้นตอนการลงทะเบียนสมาชิก
+                        </div>
+                  </div>            
+              </div>
+              <div class="register-step-container Shadow @(ViewBag.Step == 1 ? "pink-active" : "" )">
+                  <div class="register-step-text center-text">
+                        <div style="height:32px;">
+                            <p>1. ยืนยันความเป็นเจ้าของ</p>
+                            <p>หมายเลขโทรศัพท์</p>
+                        </div>
+                  </div>
+              </div>
+              <div class="register-step-container Shadow @(ViewBag.Step == 2 ? "pink-active" : "" )">
+                  <div class="register-step-text center-text">
+                        <div>
+                            <p>2. ระบุข้อมูลสมาชิก</p>
+                        </div>
+                  </div>
+             </div>
+             @if (Convert.ToInt16(ViewBag.Step) == 2)
+             { 
+                <div class="register-step-quota-container Shadow" style="width: 190px;">
+                  <div>
+                        <div class="register-step-quota-text center-text">
+                            <div style="margin-bottom:20px;"><p>สิทธิ์โทรฟรี:</p></div>
+                            <div class="register-quota-type-container" style="margin-left:15px">
+                                    <div class="Rounded" style="border: 1px solid #808285;">
+                                        <div class="register-quota-type-text">
+                                            <div class="center-text">
+                                                <p style="padding-top:5px;">โทรฟรี</p>
+                                                <p><span id="preview-quota-freq" class ="pink-text" style="font-size: 22px; font-weight:bold;">0</span>  </p>
+                                                <p style="padding-bottom:5px;">ครั้งต่อวัน</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="register-quota-type-container" style="margin-left:20px;margin-right:15px;">
+                                    <div class="Rounded" style="border: 1px solid #808285;">
+                                        <div class="register-quota-type-text">
+                                            <div class="center-text">
+                                                <p style="padding-top:5px;">โทรฟรี </p>
+                                                <p><span id="preview-quota-dur" class ="pink-text" style="font-size: 22px; font-weight:bold;">0</span></p>
+                                                <p style="padding-bottom:5px;"> นาทีต่อครั้ง</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="clear" style="height:30px;"></div>
+                            <div class="meter-gauge">
+                                    <div id="mark-min-quota">0</div>
+                                    <div id="mark-mid-quota">0</div>
+                                    <div id="mark-max-quota">0</div>
+                                    <img id= "meter-gauge-img" src="@Url.Content("~/Images/register/dial_0.png")" width="120" height="120">
+                                </div>
+                                <div class="meter-footer">
+                                        <p>นาทีโทรฟรีต่อ</p>
+                                        <p>เดือน</p>
+                                </div>
+                        </div>
+                  </div>
+              </div>
+             }
+</div> 

@@ -1,0 +1,55 @@
+﻿@model Freebie.Models.Account 
+@{
+    ViewBag.Title = "ChangeUsername";
+    Layout = "~/Views/Shared/_AccInfo.cshtml";
+}
+<div class="title pink-text" style="margin-bottom:0;">
+	<span style="font-size: 14px;">เปลี่ยนชื่อผู้ใช้บริการ Online:</span>
+</div>
+<div class = "content-area" style="padding:40px 0 0 20px;">
+@using (Html.BeginForm("ChangeUsername", "AccInfo", FormMethod.Post, new { @id = "webfront-acc-update-username-form", @class = "form-horizontal", style = "width:100%;" }))
+{	
+    <div class="control-group">
+		<label class="control-label" for="First_Name" style="text-align:left;">
+				ชื่อผู้ใช้:
+		</label>
+		<div class="controls">
+					@Model.User_Name                
+		</div>
+	</div>
+    <div class="control-group">
+		<label class="control-label" for="First_Name" style="text-align:left;">
+				ชื่อผู้ใช้ใหม่:
+		</label>
+		<div class="controls">
+					@Html.Editor("New_User_Name")               
+		</div>
+        @Html.ValidationMessage("New_User_Name")
+	</div>	
+    <div class="control-group">
+		<label class="control-label" for="First_Name" style="text-align:left;">
+				กรุณายืนยันชื่อผู้ใช้ใหม่:
+		</label>
+		<div class="controls">
+					@Html.Editor("Confirm_User_Name")            
+		</div>
+        @Html.ValidationMessage("Confirm_User_Name")
+	</div>	
+    <div style="text-align:center;">
+		<input type="submit" id="register-profile-submit" value="บันทึก" class="btn btn-primary btn-blue"/>
+	</div>
+}
+</div>
+ @Html.Partial("~/Views/Shared/_Sidebanner.cshtml")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).keydown(function (event) {
+            if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                event.preventDefault();
+            }
+        });
+        $(document).on("contextmenu", function () {
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,171 @@
+﻿@model IEnumerable<Freebie.ViewModels.SalesPerf>
+@{
+    ViewBag.Title = "SalesPerfReportResult";
+    ViewBag.PageName = "รายงานประสิทธิภาพการขาย";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    int ac_low_total = 0;
+    int ac_mid_total = 0;
+    int ac_high_total = 0;
+    int ap_low_total = 0;
+    int ap_mid_total = 0;
+    int ap_high_total = 0;
+    int grand_total = 0;
+}
+
+<div class="backend-table-title">
+	<span>เงื่อนไขการค้นหา</span>   
+</div>
+<style>
+    img 
+    {
+        margin-left:10px;    
+    }
+</style>
+<div style="margin-top: 20px;">
+    <div class="form-actions" style="width:660px;border: 1px solid #888;">
+        @using (Html.BeginForm("SalesPerfReportResult", "SalesPerformanceReport", FormMethod.Post, new { @id = "webfront-register-form", @class = "form-inline", style = "width:100%;margin:0;" }))
+        {
+            <div style ="height:40px;">
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">ตั้งแต่วันที่:</div>
+                    <div style="float:left;">
+                        <input type="text" id="start_date" name ="start_date" style="width:100px;" value="@ViewBag.start_date"/>
+                    </div>
+                </div>
+                <div style="width:20px;float:left;">&nbsp;</div>
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">ถึงวันที่:</div>
+                    <div style="float:left;">
+                        <input type="text" id="end_date" name ="end_date" style="width:100px;" value="@ViewBag.end_date"/>
+                    </div>
+                </div>
+            </div>
+            <div style ="height:40px;">
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">สังกัด:</div>
+                    <div style="float:left;">
+                        @Html.DropDownList("Dept_Cd")
+                    </div>
+                </div>
+                <div style="width:20px;float:left;">&nbsp;</div>
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">กลุ่มที่:</div>
+                    <div style="float:left;">
+                        @Html.DropDownList("Group_Id")
+                    </div>
+                </div>
+            </div>
+            <div style ="height:40px;">
+                <div style="width:320px;float:left;">
+                    <div style="width:100px;float:left;margin-top:5px;">รหัสพนักงาน:</div>
+                    <div style="float:left;">
+                        @Html.DropDownList("User_No")
+                    </div>
+                </div>
+            </div>
+            <div style ="height:30px;text-align:center;">
+                <input type="submit" id="register-profile-submit" value="ค้นหา" class="btn btn-primary btn-blue"/>
+            </div>
+        }
+
+    </div>
+    <div>
+        <table class="border-table" style="text-align:center;margin-top:20px;">
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width:100px">รหัสพนักงาน</th>
+                    <th rowspan="2" style="width:100px">วันที่</th>
+                    <th colspan="3">Active </th>
+                    <th colspan="3">Pending  </th>
+                    <th rowspan="2" style="width:100px">รวม</th>
+                </tr>
+                <tr>
+                    <th style="width:100px">(Low Quota)</th>
+                    <th style="width:100px">(Medium Quota)</th>
+                    <th style="width:100px">(High Quota)</th>
+                    <th style="width:100px">(Low Quota)</th>
+                    <th style="width:100px">(Medium Quota)</th>
+                    <th style="width:100px">(High Quota)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                { 
+                    <tr>
+                        <td>@item.user_no</td>
+                        <td>
+                            @string.Format("{0:dd/MM/yyyy}", item.reg_date)
+                        </td>
+                        <td>@item.active_low</td>
+                        <td> @item.active_mid</td>
+                        <td> @item.active_high</td>
+                        <td> @item.pending_low</td>
+                        <td> @item.pending_mid</td>
+                        <td> @item.pending_high</td>
+                        <td>@item.user_total</td>
+                        @{
+                            ac_low_total += Convert.ToInt16(item.active_low);
+                            ac_mid_total += Convert.ToInt16(item.active_mid);
+                            ac_high_total += Convert.ToInt16(item.active_high);
+                            ap_low_total += Convert.ToInt16(item.pending_low);
+                            ap_mid_total += Convert.ToInt16(item.pending_mid);
+                            ap_high_total += Convert.ToInt16(item.pending_high);
+                            grand_total += Convert.ToInt16(item.user_total);
+                        }
+                    </tr>
+                }
+                <tr>
+                    <td>รวม</td>
+                    <td></td>
+                    <td>@ac_low_total</td>
+                    <td>@ac_mid_total</td>
+                    <td>@ac_high_total</td>
+                    <td>@ap_low_total</td>
+                    <td>@ap_mid_total</td>
+                    <td>@ap_high_total</td>
+                    <td>@grand_total</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Group_Id').css('width', '100px');
+        $('#User_No').css('width', '150px');
+        var jq = $.noConflict();
+        $.datepicker.regional['th'] = {
+            closeText: 'ปิด',
+            prevText: '&#xAB;&#xA0;ย้อน',
+            nextText: 'ถัดไป&#xA0;&#xBB;',
+            currentText: 'วันนี้',
+            monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+		'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+            monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+		'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+            dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+            dayNamesShort: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            dayNamesMin: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+            weekHeader: 'Wk',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 0,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['th']);
+        $("#start_date").datepicker({
+            showOn: "button",
+            dateFormat: "dd/mm/yy",
+            buttonImage: '@Url.Content("~/Images/calendar.gif")',
+            buttonImageOnly: true
+        });
+        $("#end_date").datepicker({
+            showOn: "button",
+            dateFormat: "dd/mm/yy",
+            buttonImage: '@Url.Content("~/Images/calendar.gif")',
+            buttonImageOnly: true
+        });
+    })
+</script>
+

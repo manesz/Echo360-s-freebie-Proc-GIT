@@ -1,0 +1,173 @@
+﻿@using Freebie.Libs;
+@model Freebie.Models.Account
+@{
+    ViewBag.Title = "AcctInfoByAgent";
+    ViewBag.PageName = "ข้อมูลบัญชีลูกค้า";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    var db = new Freebie.Models.EchoContext();
+    Freebie.Models.Status st = db.Statuses.Where(x => x.Status_Type.Equals("Account")).Where(x => x.Status_Cd.Equals(Model.Status_Cd)).SingleOrDefault();
+    string status_name = "";
+    if (st != null)
+    {
+        status_name = st.Status_Name_Th;
+    }
+    
+    bool has_permission = Permission.has_permission(Permission.cust_profile_page_id);
+    bool view_all = Permission.view_all(Permission.cust_profile_page_id);
+    bool allow_update = Permission.allow_update(Permission.cust_profile_page_id);
+}
+
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+    <div style="width:24%;float:left;position:relative;">
+     @if (!Model.Status_Cd.Equals("PTUU"))
+     {
+        @Html.Partial("~/Areas/Backend/Views/Shared/CustomerMenu.cshtml")
+      
+     }
+     else
+     { 
+        <ul class="backend-acct-menu" style="position:relative; top:-5px;margin-right:20px;">
+            <li>PTTU Status</li>
+        </ul>
+     }
+    </div>
+    <div style="width:72%;float:left;">
+       
+        <div class="backend-table-title">
+	        <span>ข้อมูลบัญชีสมาชิก</span>
+        </div>
+         <table style="margin-top:20px;">
+             @if (view_all)
+             {
+                <tr style="height:30px;">
+                    <td style="width:240px;">หมายเลขสมาชิก:</td>
+                    <td>@Html.DisplayFor(model => model.Account_No)</td>
+                </tr>
+                <tr style="height:30px;">
+                    <td style="width:240px;">ชื่อผู้ใช้บริการ Online:</td>
+                    <td>
+                        
+                        @if (string.IsNullOrWhiteSpace(Model.User_Name))
+                        { 
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(model => model.User_Name)
+                        }
+                    </td>
+                </tr>
+             }
+            <tr style="height:30px;">
+                <td style="width:240px;">สถานะสมาชิก:</td>
+                <td>
+                    <div id ="acct-info-change_status">
+                        <span style="margin-right:100px;">@status_name</span>
+                            @if (allow_update && !Model.Status_Cd.Equals("PTUU"))
+                            {
+                                <a href="#" id="acct-info-change_status_link">แก้ไข</a>
+                            }
+                    </div> 
+                </td>
+            </tr>
+
+            @if (view_all)
+            {
+                <tr style="height:30px; border-bottom: 1px solid #999;">
+                    <td style="width:240px;">ชื่อ - นามสกุล:</td>
+                    <td>
+                        
+                        @if (string.IsNullOrWhiteSpace(Model.First_Name) && string.IsNullOrWhiteSpace(Model.Last_Name))
+                        { 
+                            @Html.Raw("-")
+                        }
+                        else
+                        { 
+                            @Html.DisplayFor(model => model.First_Name)  @Html.Raw(" ") @Html.DisplayFor(model => model.Last_Name)
+                        }
+                    </td>
+                </tr>
+            }
+            <tr style="height:30px;">
+                <td style="width:200px;">เบอร์โทรศัพท์ (เบอร์หลัก):</td>
+                <td>@ViewBag.PNumber</td>
+            </tr>
+             <tr style="height:30px; border-bottom: 1px solid #999;">
+                <td style="width:240px;">เบอร์โทรศัพท์ (เบอร์รอง):</td>
+                <td>
+                    @if (string.IsNullOrEmpty(ViewBag.SNumber))
+                    {
+                        @Html.Raw("-")
+                    }
+                    else
+                    { 
+                        @ViewBag.SNumber;
+                    }
+                </td>
+            </tr>
+            <tr style="height:30px;">
+                <td style="width:240px;">สิทธิ์โทรฟรี:</td>
+                <td>
+                   @if (ViewBag.Freq != null)
+                   {
+                        @Html.Raw(ViewBag.Freq + " ครั้งต่อวัน ครั้งละ " + ViewBag.Dur + " นาที")
+                   }
+                   else
+                   { 
+                        @Html.Raw("-")
+                   }
+                </td>
+            </tr>
+            <tr style="height:30px;">
+                <td style="width:240px;">สิทธิ์โทรฟรีคงเหลือของวันนี้ (ครั้ง):</td>
+                <td>
+                    @if (@ViewBag.Remaining != null)
+                    { 
+                        @Html.Raw(ViewBag.Remaining)
+                    }
+                    else
+                    { 
+                        @Html.Raw("-")
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+<div class="backend-acct-update-status-div" id ="backend-acct-update-status-id">
+    @using (Html.BeginForm("UpdateAcctInfoByAgent", "SearchCustByAgent", FormMethod.Post, new { @id = "backend-acct-update-status-form", @class = "form-horizontal", style = "width:100%;margin:0;" }))
+    {
+        <div>
+            @Html.DropDownList("Statuses")
+            <a href="#" id="backend-acct-submit-link">บันทึก</a>
+        </div>
+        <input type="hidden" name="account_id" value="@Model.Account_Id" />
+    }
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#acct-info-change_status_link').on('click', function (e) {
+            var $form = $('#backend-acct-update-status-id');
+            var $current = $('#acct-info-change_status');
+
+            $current.replaceWith($form);
+            $form.show();
+
+            return false;
+        });
+
+        $('#backend-acct-submit-link').on('click', function (e) {
+            var $form = $('#backend-acct-update-status-form');
+            $form.submit();
+            return false;
+        });
+    });
+</script>
+}
+else
+{ 
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

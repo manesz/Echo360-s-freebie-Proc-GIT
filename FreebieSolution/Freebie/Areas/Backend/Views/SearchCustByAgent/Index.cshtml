@@ -1,0 +1,56 @@
+﻿@using Freebie.Libs;
+@{
+    ViewBag.Title = "SearchCustByAgent";
+    ViewBag.PageName = "ข้อมูลลูกค้า";
+    Layout = "~/Areas/Backend/Views/Shared/_Backend.cshtml";
+    
+    bool has_permission = Permission.has_permission(Permission.search_cust_page_id);
+}
+<div class="backend-table-title">
+	<span>ค้นหาบัญชี</span>   
+</div>
+@if (has_permission)
+{
+<div style="margin: 20px 20px 0 20px;">
+   @using (Html.BeginForm("SearchCustResult", "SearchCustByAgent", FormMethod.Post, new { @id = "backend-search-cust-form", @class = "form-horizontal", style = "width:450px;" }))
+   {
+       <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					เบอร์โทรศัพท์:
+				</label>
+				<div class="controls">
+					@Html.Editor("PhoneNumber")                   
+				</div>
+		</div>
+       <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					หมายเลขบัตรประชาชน:
+				</label>
+				<div class="controls">
+					@Html.Editor("Identification_Number")                   
+				</div>
+		</div>
+       <div class="control-group">
+				<label class="control-label" for="First_Name" style="text-align:left;">
+					อีเมล์:
+				</label>
+				<div class="controls">
+					@Html.Editor("Email")                   
+				</div>
+		</div>
+       <div style="text-align:center;">
+            <input type="submit" class="btn btn-primary btn-blue" value="ค้นหา"/>
+       </div>
+   }
+   @if (!string.IsNullOrWhiteSpace(ViewBag.Error))
+   { 
+    <div style="width:400px;margin:20px;color:Red;text-align:center;">
+        <p>@ViewBag.Error</p>
+    </div>
+   }
+</div>
+}
+else
+{ 
+     @Html.Partial("~/Views/Statics/PermissionDenied.cshtml")
+}

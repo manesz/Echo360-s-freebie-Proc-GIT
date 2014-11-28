@@ -1,0 +1,23 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Test</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("Create", "SmsRegistration", FormMethod.Post, new { @id = "webfront-forget-username-form", @class = "form-horizontal" }))
+        {
+            <input type="text" name="mobile_no" /> 
+            <input type="text" name="keyword" /> 
+            <input type="text" name="content" /> 
+             <input type="submit" id="register-profile-submit" value="send" class="btn btn-primary btn-blue"/>
+        }
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿@{
+    string side_banner_path = "~/Images/Banners/Side/";    
+}
+<style>
+      
+     .Statics_RegisterResultSuccess
+        {
+            background-image: url(@Url.Content(side_banner_path + "Statics_RegisterResultSuccess_250.png")); 
+            background-repeat: no-repeat; 
+            background-size: 250px auto;  
+            margin-top: 0;  
+    
+        }
+     #top-banner-div { background-image: url(@Url.Content("~/Images/Banners/Top/" + "Statics_RegisterResultSuccess" + ".png")); }
+</style>
+
+<div style="margin: 0 0 0 150px;">
+    <div class="title pink-text" style="margin-bottom:20px;">
+		    <span>ขอบคุณที่ลงทะเบียนใช้บริการ Freebie</span>
+    </div>
+    <div class = "content-area" style="width: 500px;">
+        <ul style="line-height: 30px;">
+           <li> คุณได้รับสิทธิ์โทรฟรี @Convert.ToByte(ViewBag.Quota_Freq_Val) ครั้งต่อวัน ครั้งละ  @Convert.ToByte(ViewBag.Quota_Dur_Val) นาที รวมสูงสุด @(Convert.ToByte(ViewBag.Quota_Freq_Val) * Convert.ToByte(ViewBag.Quota_Dur_Val) * 30) นาทีต่อเดือน
+           </li>
+           <li>
+                คุณสามารถเริ่มโทรฟรีได้ทันที โดยกด *115 ตามด้วยเบอร์โทรศัพท์ปลายทาง แล้วโทรออก
+           </li>
+           <li>
+                คุณสามารถตรวจสอบหรือเปลี่ยนแปลงข้อมูลสมาชิกได้ตลอด 24 ชั่วโมงผ่านเว็บไซด์ www.freebie.co.th 
+           </li>    
+        </ul>
+    </div>
+    <div class = "side-banner Statics_RegisterResultSuccess">
+
+    </div>
+</div>
+
