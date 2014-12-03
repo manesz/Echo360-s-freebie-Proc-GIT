@@ -22,6 +22,7 @@ using System.Transactions;
 using System.Data.Objects;
 using System.Threading;
 
+
 namespace Freebie.Controllers
 {
     public class UsersController : Controller
@@ -91,15 +92,19 @@ namespace Freebie.Controllers
 			string password = Request.Form["Password"];
 			string enc = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "SHA1");
 
+            //ViewBag.ERROR = enc;//DEBUG
 
 			if (username != "" && password != "")
 			{
                 using (var db = new EchoContext())
                 {
-                    Account a = db.Accounts.Where(x => x.User_Name.Equals(username)).Where(x => x.Password.Equals(enc)).SingleOrDefault();
+                    Account a = db.Accounts.Where(x => x.User_Name.Equals(username)).Where(x => x.Password.Equals(enc)).SingleOrDefault();//ORIGIN
+                    //Account a = db.User.Where().//DEBUG
+                    
 
                     if (a != null)
                     {
+
                         //if (System.Web.HttpContext.Current.Cache[a.Account_Id.ToString()] == null)
                         //{
                             FormsAuthentication.SetAuthCookie(username, true);
@@ -165,6 +170,7 @@ namespace Freebie.Controllers
                 q_count += 1;
             }
             ViewBag.Quotas = quotas;
+            //ViewBag.Error = result;//DEBUG
             switch (result)
             { 
                 case 0:
@@ -174,6 +180,7 @@ namespace Freebie.Controllers
                 case 1:
                     ViewBag.ValidNumber = true;
                     otp = OTPHandler.SendOTPReg(phoneNumber);
+                    ViewBag.Error = otp;//DEBUG
                     ViewBag.ShowPwd = true;
                     if (otp.Equals("limit_daily"))
                     {
@@ -1716,7 +1723,7 @@ namespace Freebie.Controllers
             }
             else
             {
-                cookie = HttpCookieEncryption.Decrypt(cookie);
+                //cookie = HttpCookieEncryption.Decrypt(cookie);
                 int i = 0;
                 foreach (var k in key)
                 {
@@ -1729,8 +1736,15 @@ namespace Freebie.Controllers
                
             }
 
-            HttpCookie cookie_enc = HttpCookieEncryption.Encrypt(cookie);
-            this.ControllerContext.HttpContext.Response.Cookies.Add(cookie_enc);
+            //HttpCookie cookie_enc = HttpCookieEncryption.Encrypt(cookie);
+            //this.ControllerContext.HttpContext.Response.Cookies.Add(cookie_enc);
+            
+            //cookie.Secure = true;
+            //this.ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+
+            //HttpCookie cookie_enc = HttpCookieEncryption.Encrypt(cookie);
+            this.ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+
         }
 
         private string GetCookie(string ckname, string key)
@@ -1741,7 +1755,7 @@ namespace Freebie.Controllers
             {
                 return value;
             }
-            cookie = HttpCookieEncryption.Decrypt(cookie);
+            //cookie = HttpCookieEncryption.Decrypt(cookie);
             value = cookie[key];
             return value;
         }

@@ -875,7 +875,7 @@ namespace Freebie.Areas.Backend.Controllers
             }
             else
             {
-                cookie = HttpCookieEncryption.Decrypt(cookie);
+                //cookie = HttpCookieEncryption.Decrypt(cookie);//ORIGIN
                 int i = 0;
                 foreach (var k in key)
                 {
@@ -888,8 +888,9 @@ namespace Freebie.Areas.Backend.Controllers
 
             }
 
-            HttpCookie cookie_enc = HttpCookieEncryption.Encrypt(cookie);
-            this.ControllerContext.HttpContext.Response.Cookies.Add(cookie_enc);
+            //HttpCookie cookie_enc = HttpCookieEncryption.Encrypt(cookie);//ORIGIN
+            //this.ControllerContext.HttpContext.Response.Cookies.Add(cookie_enc);//ORIGIN
+            this.ControllerContext.HttpContext.Response.Cookies.Add(cookie);
         }
 
         private string GetCookie(string ckname, string key)
@@ -900,7 +901,7 @@ namespace Freebie.Areas.Backend.Controllers
             {
                 return value;
             }
-            cookie = HttpCookieEncryption.Decrypt(cookie);
+            //cookie = HttpCookieEncryption.Decrypt(cookie);//ORIGIN
             value = cookie[key];
             return value;
         }

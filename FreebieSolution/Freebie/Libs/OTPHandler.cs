@@ -144,17 +144,25 @@ namespace Freebie.Libs
 
         public static string SendOTPReg(string phone_number)
         {
+            string result = "";
+
             string otp = RequestOTP(phone_number);
             if (otp.Equals("limit_daily"))
             {
-                return otp;
+                //return otp;//ORIGIN
+                return "SendOTPReg_limit_daily";
             }
             if (otp.Equals("limit_interval"))
             {
-                return otp;
+                //return otp;//ORIGIN
+                return "SendOTPReg_limit_interval";
             }
             Message.SendOTPReg(phone_number, otp);
-            return otp; //return for debugging
+
+
+            //result = Message.SendOTPReg(phone_number, otp);//DEBUG
+            //return otp; //return for debugging
+            return result; //DEBUG
         }
 
         public static string SendOTPUsername(string phone_number)
@@ -162,11 +170,13 @@ namespace Freebie.Libs
             string otp = RequestOTP(phone_number);
             if (otp.Equals("limit_daily"))
             {
-                return otp;
+                //return otp;//ORIGIN
+                return "SendOTPUsername_limit_daily";
             }
             if (otp.Equals("limit_interval"))
             {
-                return otp;
+                //return otp;
+                return "SendOTPUsername_limit_interval";
             }
             Message.SendOTPUsername(phone_number, otp);
             return otp; //return for debugging
